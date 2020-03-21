@@ -45,10 +45,10 @@ import org.r0bb3n.maven.model.ProjectStatusContainer;
 import org.r0bb3n.maven.model.Status;
 
 /**
- * Goal which touches a timestamp file.
+ * Check project status in SonarQube and fail build, if quality gate is not passed
  */
 @Mojo(name = "check")
-public class SonarqubeQualityGatesMojo extends AbstractMojo {
+public class SonarQualityGateMojo extends AbstractMojo {
 
   private static final String PROP_SONAR_LOGIN = "sonar.login";
   private static final String PROP_SONAR_PASSWORD = "sonar.password";
@@ -71,7 +71,7 @@ public class SonarqubeQualityGatesMojo extends AbstractMojo {
   private String sonarProjectKey;
 
   /**
-   * sonar login (username ore token), see also <a href="https://docs.sonarqube.org/latest/extend/web-api/">SonarQube
+   * sonar login (username or token), see also <a href="https://docs.sonarqube.org/latest/extend/web-api/">SonarQube
    * - Web API Authentication</a> <br/> aligned to sonar-maven-plugin analysis parameters, see also
    * <a href="https://docs.sonarqube.org/latest/analysis/analysis-parameters/">SonarQube - Analysis
    * Parameters</a>
@@ -91,8 +91,8 @@ public class SonarqubeQualityGatesMojo extends AbstractMojo {
   /**
    * name of the branch to check the quality gate in sonar
    */
-  @Parameter(property = "sonarqube.qualitygates.branch", defaultValue = "master")
-  private String sonarqubeQualitygatesBranch;
+  @Parameter(property = "sonar.qualitygate.branch", defaultValue = "master")
+  private String sonarQualitygateBranch;
 
   public void execute() throws MojoExecutionException, MojoFailureException {
     String in = sonarHostUrl.toExternalForm();
@@ -167,7 +167,7 @@ public class SonarqubeQualityGatesMojo extends AbstractMojo {
   private String createQuery() {
     Map<String, String> params = new LinkedHashMap<>();
     params.put("projectKey", sonarProjectKey);
-    params.put("branch", sonarqubeQualitygatesBranch);
+    params.put("branch", sonarQualitygateBranch);
     String query = params.entrySet().stream().map(this::toQueryEntry)
         .collect(Collectors.joining("&"));
     return "?" + query;

@@ -31,7 +31,7 @@ public class DeserializationTest {
 
   @Before
   public void setUp() {
-    objectMapper = new SonarqubeQualityGatesMojo().createMapper();
+    objectMapper = new SonarQualityGateMojo().createMapper();
   }
 
   @Test
