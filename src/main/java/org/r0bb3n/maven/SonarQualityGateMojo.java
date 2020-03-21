@@ -1,7 +1,5 @@
-package org.r0bb3n.maven;
-
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2020 r0bb3n
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -15,6 +13,7 @@ package org.r0bb3n.maven;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.r0bb3n.maven;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
