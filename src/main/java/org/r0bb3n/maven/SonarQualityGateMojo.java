@@ -94,7 +94,46 @@ public class SonarQualityGateMojo extends AbstractMojo {
   @Parameter(property = "sonar.qualitygate.branch", defaultValue = "master")
   private String sonarQualitygateBranch;
 
+  /**
+   * request project status from sonar and evaluate quality gate result
+   *
+   * @throws MojoExecutionException configuration errors or io problems
+   * @throws MojoFailureException quality gate evaluates as not passed
+   */
   public void execute() throws MojoExecutionException, MojoFailureException {
+    URI projectStatusUri = createRequestUri();
+    getLog().info("Sonar Web API call: " + projectStatusUri);
+
+    HttpResponse<String> response = retrieveResponse(projectStatusUri);
+    String json = response.body();
+    if (getLog().isDebugEnabled()) {
+      getLog().debug(
+          String.format("Response from Sonar (HTTP Status: %d):\n%s", response.statusCode(), json));
+    }
+    if (response.statusCode() != HttpURLConnection.HTTP_OK) {
+      throw new MojoExecutionException(String
+          .format("Bad status code '%d' returned from '%s' - Body: %s", response.statusCode(),
+              projectStatusUri, json));
+    }
+
+    ProjectStatus projectStatus = parseProjectStatus(json);
+    if (projectStatus.getStatus() != Status.OK) {
+      String failedConditions = projectStatus.getConditions().stream()
+          .filter(c -> c.getStatus() != Status.OK)
+          .map(Condition::getMetricKey).collect(Collectors.joining(", "));
+      throw new MojoFailureException(
+          String.format("Quality Gate not passed! Failed metric(s): %s", failedConditions));
+    } else {
+      getLog().info("project status: " + projectStatus.getStatus());
+    }
+  }
+
+  /**
+   * Create URI with right base url, web API path and proper query parameters
+   *
+   * @throws MojoExecutionException URI could not created
+   */
+  private URI createRequestUri() throws MojoExecutionException {
     String in = sonarHostUrl.toExternalForm();
     StringBuilder urlBuilder = new StringBuilder(in);
     if (!in.endsWith("/")) {
@@ -108,36 +147,16 @@ public class SonarQualityGateMojo extends AbstractMojo {
       throw new MojoExecutionException(
           String.format("Cannot parse value of '%s': %s", PROP_SONAR_HOST_URL, sonarHostUrl), e);
     }
+    return measureUri;
+  }
 
-    getLog().info("Sonar Web API call: " + measureUri);
-
-    HttpClient client = HttpClient.newHttpClient();
-    HttpRequest request = createRequestBuilder()
-        .uri(measureUri)
-        .timeout(Duration.ofMinutes(1))
-        .header(HEADER_NAME_CONTENT_TYPE, "application/json")
-        .GET()
-        .build();
-    HttpResponse<String> response;
-    try {
-      response = client.send(request, BodyHandlers.ofString());
-    } catch (IOException e) {
-      throw new MojoExecutionException(String.format("Error reading from Sonar: %s", measureUri),
-          e);
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      throw new MojoExecutionException("Interrupted", e);
-    }
-
-    String json = response.body();
-    getLog().debug("Response from Sonar:\n" + json);
-
-    if (response.statusCode() != HttpURLConnection.HTTP_OK) {
-      throw new MojoExecutionException(String
-          .format("Bad status code '%d' returned from '%s' - Body: %s", response.statusCode(),
-              measureUri, json));
-    }
-
+  /**
+   * Parse JSON string into a proper {@link ProjectStatus} object
+   *
+   * @param json JSON containing data of project status
+   * @throws MojoExecutionException malformed, incomplete or empty JSON input
+   */
+  private ProjectStatus parseProjectStatus(String json) throws MojoExecutionException {
     ProjectStatus projectStatus;
     try {
       projectStatus = readProjectStatus(json);
@@ -147,16 +166,35 @@ public class SonarQualityGateMojo extends AbstractMojo {
     if (projectStatus == null) {
       throw new MojoExecutionException(String.format("Error parsing response: %s", json));
     }
+    return projectStatus;
+  }
 
-    if (projectStatus.getStatus() != Status.OK) {
-      String failedConditions = projectStatus.getConditions().stream()
-          .filter(c -> c.getStatus() != Status.OK)
-          .map(Condition::getMetricKey).collect(Collectors.joining(", "));
-      throw new MojoFailureException(
-          String.format("Quality Gate not passed! Failed metrics: %s", failedConditions));
-    } else {
-      getLog().info("project status: " + projectStatus.getStatus());
+  /**
+   * Fire a GET request and return response body as String.
+   *
+   * @param projectStatusUri resource to get
+   * @throws MojoExecutionException io problems or interrupted
+   */
+  private HttpResponse<String> retrieveResponse(URI projectStatusUri)
+      throws MojoExecutionException {
+    HttpClient client = HttpClient.newHttpClient();
+    HttpRequest request = createRequestBuilder()
+        .GET().uri(projectStatusUri)
+        .timeout(Duration.ofMinutes(1))
+        .header(HEADER_NAME_CONTENT_TYPE, "application/json")
+        .build();
+    HttpResponse<String> response;
+    try {
+      response = client.send(request, BodyHandlers.ofString());
+    } catch (IOException e) {
+      throw new MojoExecutionException(
+          String.format("Error reading from Sonar: %s", projectStatusUri),
+          e);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new MojoExecutionException("Interrupted", e);
     }
+    return response;
   }
 
   /**
