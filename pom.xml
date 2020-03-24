@@ -4,7 +4,7 @@
   <groupId>org.r0bb3n.maven</groupId>
   <artifactId>sonar-quality-gate-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>1.0.0</version>
+  <version>1-SNAPSHOT</version>
 
   <name>sonar-quality-gate-maven-plugin Maven Mojo</name>
   <url>https://github.com/r0bb3n/sonar-quality-gate-maven-plugin</url>
@@ -23,7 +23,7 @@
     <connection>scm:git:git@github.com:r0bb3n/sonar-quality-gate-maven-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:r0bb3n/sonar-quality-gate-maven-plugin.git
     </developerConnection>
-    <tag>v1.0.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
