@@ -1,5 +1,7 @@
 # Sonar Quality Gate Maven Plugin
 
+![Maven Build](https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/workflows/Maven%20Build/badge.svg)
+
 Check your SonarQube project if it passes its quality gate. Otherwise fail the maven job.
 
 ## Prerequisites
