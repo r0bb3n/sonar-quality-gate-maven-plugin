@@ -39,22 +39,23 @@ Ensure that there is no (old) metadata inside `target` from a former sonar-maven
 **Advanced mode**
 
 ```
-mvn sonar-quality-gate:check -Dsonar.qualitygate.branch=develop
+mvn sonar-quality-gate:check -Dsonar-quality-gate.branch=develop
 ```
 
 ### Plugin parameters
 
-| Parameter                                | Description                                                                                                                                                             | Used in mode     |
-|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------|
-| `sonar.host.url`                         | sonar host url                                                                                                                                                          | _all_            |
-| `sonar.login`                            | sonar login (username or token) for basic auth, see also [SonarQube - Web API Authentication][sonar-web-api-auth]                                                       | _all_            |
-| `sonar.password`                         | sonar password for basic auth, see also [SonarQube - Web API Authentication][sonar-web-api-auth]                                                                        | _all_            |
-| `sonar.projectKey`                       | project key used in sonar for this project<br>(default: `${project.groupId}:${project.artifactId}`)                                                                     | simple, advanced |
-| `sonar.qualitygate.branch`               | name of the branch to check the quality gate in sonar                                                                                                                   | advanced         |
-| `sonar.qualitygate.pullRequest`          | name of the pull request to check the quality gate in sonar                                                                                                             | advanced         |
-| `sonar.qualitygate.checkTask.attempts`   | How often try to retrieve the analysis id from the task details in sonar until stopping the job<br>(default: `10`; name plugin configuration node: `checkTaskAttempts`) | integrated       |
-| `sonar.qualitygate.checkTask.interval.s` | How many seconds to wait between two requests when retrieving task details<br>(default: `5`; name plugin configuration node: `checkTaskIntervalS`)                      | integrated       |
+| Parameter                                 | Description                                                                                                                                                                                     | Used in mode     |
+|-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------|
+| `sonar.host.url`                          | sonar host url (aligned to [sonar-maven-plugin analysis parameters][sonar-analysis-param])                                                                                                      | _all_            |
+| `sonar.login`                             | sonar login (username or token) for basic auth (aligned to [sonar-maven-plugin analysis parameters][sonar-analysis-param])<br>see also [SonarQube - Web API Authentication][sonar-web-api-auth] | _all_            |
+| `sonar.password`                          | sonar password for basic auth (aligned to [sonar-maven-plugin analysis parameters][sonar-analysis-param])<br>see also [SonarQube - Web API Authentication][sonar-web-api-auth]                  | _all_            |
+| `sonar.projectKey`                        | project key used in sonar for this project (aligned to [sonar-maven-plugin analysis parameters][sonar-analysis-param])<br>(default: `${project.groupId}:${project.artifactId}`)                 | simple, advanced |
+| `sonar-quality-gate.branch`               | name of the branch to check the quality gate in sonar                                                                                                                                           | advanced         |
+| `sonar-quality-gate.pullRequest`          | name of the pull request to check the quality gate in sonar                                                                                                                                     | advanced         |
+| `sonar-quality-gate.checkTask.attempts`   | How often try to retrieve the analysis id from the task details in sonar until stopping the job<br>(default: `10`)                                                                              | integrated       |
+| `sonar-quality-gate.checkTask.interval.s` | How many seconds to wait between two requests when retrieving task details<br>(default: `5`)                                                                                                    | integrated       |
 
+[sonar-analysis-param]: https://docs.sonarqube.org/latest/analysis/analysis-parameters/
 [sonar-web-api-auth]: https://docs.sonarqube.org/latest/extend/web-api/
 
 ## Internals

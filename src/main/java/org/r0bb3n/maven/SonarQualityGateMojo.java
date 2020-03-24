@@ -73,13 +73,18 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private static final String REPORT_TASK_KEY_CE_TASK_ID = "ceTaskId";
 
   /**
-   * sonar host url
+   * sonar host url<br/> aligned to sonar-maven-plugin analysis parameters, see also
+   * <a href="https://docs.sonarqube.org/latest/analysis/analysis-parameters/">SonarQube - Analysis
+   * Parameters</a>
    */
   @Parameter(property = PROP_SONAR_HOST_URL, defaultValue = "http://localhost:9000")
   private URL sonarHostUrl;
 
   /**
-   * project key used in sonar for this project
+   * project key used in sonar for this project<br/> aligned to sonar-maven-plugin analysis
+   * parameters, see also
+   * <a href="https://docs.sonarqube.org/latest/analysis/analysis-parameters/">SonarQube - Analysis
+   * Parameters</a>
    */
   @Parameter(property = "sonar.projectKey", defaultValue = "${project.groupId}:${project.artifactId}")
   private String sonarProjectKey;
@@ -105,26 +110,26 @@ public class SonarQualityGateMojo extends AbstractMojo {
   /**
    * name of the branch to check the quality gate in sonar
    */
-  @Parameter(property = "sonar.qualitygate.branch")
+  @Parameter(property = "sonar-quality-gate.branch")
   private String branch;
 
   /**
    * name of the pull request to check the quality gate in sonar
    */
-  @Parameter(property = "sonar.qualitygate.pullRequest")
+  @Parameter(property = "sonar-quality-gate.pullRequest")
   private String pullRequest;
 
   /**
    * How often try to retrieve the analysis id from the task details in sonar until stopping the
    * job
    */
-  @Parameter(property = "sonar.qualitygate.checkTask.attempts", defaultValue = "10")
+  @Parameter(property = "sonar-quality-gate.checkTask.attempts", defaultValue = "10")
   private int checkTaskAttempts;
 
   /**
    * How many seconds to wait between two requests when retrieving task details
    */
-  @Parameter(property = "sonar.qualitygate.checkTask.interval.s", defaultValue = "5")
+  @Parameter(property = "sonar-quality-gate.checkTask.interval.s", defaultValue = "5")
   private int checkTaskIntervalS;
 
   /**
