@@ -105,4 +105,13 @@ This endpoint is used to retrieve the analysis id of a prior sonar-maven-plugin 
 * on [sonarcloud.io Web-API](https://sonarcloud.io/web_api/api/ce/task)
 * in your SonarQube instance: `<sonar.host.url>/web_api/api/ce/task`
 
+### Maven calls
+
+#### Release 
+
+**_prepare_** - manage `pom.xml` and create proper commits and tag
+
+```
+mvn release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.0.0 -Dtag=v1.0.0
+```
 

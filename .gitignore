@@ -1,6 +1,7 @@
 # Maven
 target/
 pom.xml.*
+release.properties
 
 # IntelliJ
 .idea/

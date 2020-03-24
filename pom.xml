@@ -20,6 +20,24 @@
     </license>
   </licenses>
 
+  <scm>
+    <url>https://github.com/r0bb3n/sonar-quality-gate-maven-plugin</url>
+    <connection>scm:git:git@github.com:r0bb3n/sonar-quality-gate-maven-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:r0bb3n/sonar-quality-gate-maven-plugin.git
+    </developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues</url>
+  </issueManagement>
+
+  <ciManagement>
+    <system>GitHub Actions</system>
+    <url>https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/actions</url>
+  </ciManagement>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -27,16 +45,7 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-        <configuration>
-          <release>11</release>
-        </configuration>
-      </plugin>
-
-      <plugin>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>3.6.0</version>
         <executions>
           <execution>
             <id>default-descriptor</id>
@@ -54,7 +63,38 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <release>11</release>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <tagNameFormat>v@{project.version}</tagNameFormat>
+        </configuration>
+      </plugin>
     </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-plugin-plugin</artifactId>
+          <version>3.6.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>3.0.0-M1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 
   <dependencies>
