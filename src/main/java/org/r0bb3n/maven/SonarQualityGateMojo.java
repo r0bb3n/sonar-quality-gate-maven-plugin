@@ -103,31 +103,51 @@ public class SonarQualityGateMojo extends AbstractMojo {
   /**
    * name of the branch to check the quality gate in sonar
    */
-  @Parameter(property = "sonar.qualitygate.branch", defaultValue = "master")
-  private String sonarQualitygateBranch;
+  @Parameter(property = "sonar.qualitygate.branch")
+  private String branch;
 
-  @Parameter(property = "sonar.qualitygate.check.task.attempts", defaultValue = "10")
-  private int sonarQualitygateCheckTaskAttemps;
+  /**
+   * name of the pull request to check the quality gate in sonar
+   */
+  @Parameter(property = "sonar.qualitygate.pullRequest")
+  private String pullRequest;
 
-  @Parameter(property = "sonar.qualitygate.check.task.interval.s", defaultValue = "5")
-  private int sonarQualitygateCheckTaskIntervalS;
+  /**
+   * How often try to retrieve the analysis id from the task details in sonar until stopping the
+   * job
+   */
+  @Parameter(property = "sonar.qualitygate.checkTask.attempts", defaultValue = "10")
+  private int checkTaskAttempts;
+
+  /**
+   * How many seconds to wait between two requests when retrieving task details
+   */
+  @Parameter(property = "sonar.qualitygate.checkTask.interval.s", defaultValue = "5")
+  private int checkTaskIntervalS;
 
   /**
    * request project status from sonar and evaluate quality gate result
    *
-   * @throws MojoExecutionException configuration errors or io problems
+   * @throws MojoExecutionException configuration errors, io problems, ...
    * @throws MojoFailureException quality gate evaluates as not passed
    */
   public void execute() throws MojoExecutionException, MojoFailureException {
-    Optional<String> analysisIdOpt;
-    Optional<URI> ceTaskUriOpt = createCeTaskRequestUri();
-    if (ceTaskUriOpt.isPresent()) {
-      analysisIdOpt = retrieveAnalysisId(ceTaskUriOpt.get());
+    String analysisId;
+    if (isBlank(branch) && isBlank(pullRequest)) {
+      Optional<String> ceTaskIdOpt = findCeTaskId();
+      if (ceTaskIdOpt.isPresent()) {
+        // previous sonar run found, switching to 'integrated'
+        analysisId = retrieveAnalysisId(ceTaskIdOpt.get());
+      } else {
+        // no previous sonar run found, switching to 'simple'
+        analysisId = null;
+      }
     } else {
-      analysisIdOpt = Optional.empty();
+      // branch or PR was supplied, the 'advanced' mode was chosen
+      analysisId = null;
     }
 
-    URI projectStatusUri = createProjectStatusRequestUri(analysisIdOpt.orElse(null));
+    URI projectStatusUri = createProjectStatusRequestUri(analysisId);
     String projStatJson = retrieveResponse(projectStatusUri);
 
     ProjectStatus projectStatus = parseContainer(ProjectStatusContainer.class, projStatJson);
@@ -143,15 +163,18 @@ public class SonarQualityGateMojo extends AbstractMojo {
   }
 
   /**
-   * Check task details and read analysis id. If task is still ongoing (PENDING/IN_PROGRESS), the
-   * threads sleeps for {@link #sonarQualitygateCheckTaskIntervalS} and tries in total {@link
-   * #sonarQualitygateCheckTaskAttemps} times.
+   * Check task details and read analysis id. If task is still ongoing ({@link
+   * Task.Status#IN_PROGRESS}/{@link Task.Status#PENDING}), the threads sleeps for {@link
+   * #checkTaskIntervalS} and tries in total {@link #checkTaskAttempts} times.
    *
-   * @param ceTaskUri complete URI to task details
+   * @param ceTaskId ce task id to gather details (including analysis id)
    * @return analysis id
+   * @throws MojoExecutionException task got unsuitable status (({@link Task.Status#FAILED}/{@link
+   * Task.Status#CANCELED}) or task is still ongoing but attempt limit is reached.
    */
-  private Optional<String> retrieveAnalysisId(URI ceTaskUri) throws MojoExecutionException {
-    int attemptsLeft = sonarQualitygateCheckTaskAttemps;
+  private String retrieveAnalysisId(String ceTaskId) throws MojoExecutionException {
+    URI ceTaskUri = createUri(SONAR_WEB_API_PATH_CE_TASK, Collections.singletonMap("id", ceTaskId));
+    int attemptsLeft = checkTaskAttempts;
     Task.Status status = Task.Status.IN_PROGRESS;
     String analysisId = null;
 
@@ -168,8 +191,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
           try {
             getLog().info(String
                 .format("Analysis in progress, next retry in %ds (attempts left: %d)",
-                    sonarQualitygateCheckTaskIntervalS, attemptsLeft));
-            Thread.sleep(TimeUnit.SECONDS.toMillis(sonarQualitygateCheckTaskIntervalS));
+                    checkTaskIntervalS, attemptsLeft));
+            Thread.sleep(TimeUnit.SECONDS.toMillis(checkTaskIntervalS));
           } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new MojoExecutionException("Interrupted", e);
@@ -177,24 +200,30 @@ public class SonarQualityGateMojo extends AbstractMojo {
           break;
         default:
           throw new MojoExecutionException(
-              "Cannot determine analysis id - bad task status: " + status);
+              "Cannot determine analysis id - unsuitable task status: " + status);
       }
     }
-    return Optional.ofNullable(analysisId);
+    if (analysisId == null) {
+      throw new MojoExecutionException(String.format(
+          "Could not fetch analysis id within %d requests with an interval of %d seconds (last status: %s). Please "
+              + "increase the values 'checkTaskAttempts' and/or 'checkTaskIntervalS' to fit your projects needs.",
+          checkTaskAttempts, checkTaskIntervalS, status));
+    }
+
+    return analysisId;
   }
 
   /**
-   * Determine compute engine task id ("ceTaskId") of previous run of sonar-maven-plugin and create
-   * URI to retrieve detailed information especially the analysisId.
+   * Determine compute engine task id ("ceTaskId") of previous run of sonar-maven-plugin
    *
-   * @return URI to request task details or empty, if no ceTaskId could be found.
+   * @return id to request task details
    * @throws MojoExecutionException io problems when reading sonar-maven-plugin file
    */
-  private Optional<URI> createCeTaskRequestUri() throws MojoExecutionException {
+  private Optional<String> findCeTaskId() throws MojoExecutionException {
     Path reportTaskPath = Path.of("target", "sonar", "report-task.txt");
     if (!Files.exists(reportTaskPath)) {
-      getLog()
-          .info("no report file from previously sonar-maven-plugin run found: " + reportTaskPath);
+      getLog().info("no report file from previously sonar-maven-plugin "
+          + "run found: " + reportTaskPath);
       return Optional.empty();
     }
     String ceTaskId;
@@ -206,33 +235,39 @@ public class SonarQualityGateMojo extends AbstractMojo {
       throw new MojoExecutionException(
           String.format("Error parsing properties in: %s", reportTaskPath), e);
     }
-
     if (isBlank(ceTaskId)) {
-      getLog().warn(String.format("Property '%s' not found in '%s'", REPORT_TASK_KEY_CE_TASK_ID,
-          reportTaskPath));
-      return Optional.empty();
+      throw new MojoExecutionException(
+          String.format("Property '%s' not found in '%s'", REPORT_TASK_KEY_CE_TASK_ID,
+              reportTaskPath));
     } else {
-      return Optional
-          .of(createUri(SONAR_WEB_API_PATH_CE_TASK, Collections.singletonMap("id", ceTaskId)));
+      return Optional.of(ceTaskId);
     }
   }
 
   /**
-   * Create URI with right base url, web API path and proper query parameters including project
-   * related values (projectKey, branch, ...)
+   * Create URI with right base url, web API path and proper query parameters including either
+   * analysis id ('integrated' mode), project key ('simple' mode) or project key with either branch
+   * or pull request name  ('advanced' mode)
    *
    * @param analysisId analysisId or {@code null}
-   * @throws MojoExecutionException URI could not created
+   * @throws MojoExecutionException URI could not be created
    */
   private URI createProjectStatusRequestUri(String analysisId)
       throws MojoExecutionException {
     Map<String, String> params;
     if (analysisId != null) {
+      // 'integrated' mode
       params = Collections.singletonMap("analysisId", analysisId);
     } else {
+      // 'simple' and 'advanced' mode
       params = new LinkedHashMap<>();
       params.put("projectKey", sonarProjectKey);
-      params.put("branch", sonarQualitygateBranch);
+      if (!isBlank(branch)) {
+        params.put("branch", branch);
+      }
+      if (!isBlank(pullRequest)) {
+        params.put("pullRequest", pullRequest);
+      }
     }
     return createUri(SONAR_WEB_API_PATH_PROJECT_STATUS, params);
   }
