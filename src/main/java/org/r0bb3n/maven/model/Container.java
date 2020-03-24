@@ -15,15 +15,10 @@
  */
 package org.r0bb3n.maven.model;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Data
-public class ProjectStatusContainer implements Container<ProjectStatus> {
+public interface Container<T> {
 
-  private ProjectStatus projectStatus;
-
-  @Override
-  public ProjectStatus getContent() {
-    return projectStatus;
-  }
+  @JsonIgnore
+  T getContent();
 }

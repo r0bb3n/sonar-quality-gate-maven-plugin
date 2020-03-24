@@ -18,10 +18,17 @@ package org.r0bb3n.maven.model;
 import java.util.List;
 import lombok.Data;
 
+/**
+ * API Model, see https://github.com/SonarSource/sonarqube/blob/7.9.1/sonar-ws/src/main/protobuf/ws-qualitygates.proto
+ */
 @Data
 public class ProjectStatus {
 
   private Status status;
   private boolean ignoredConditions;
   private List<Condition> conditions;
+
+  public enum Status {
+    OK, WARN, NONE, ERROR
+  }
 }

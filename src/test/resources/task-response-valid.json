@@ -1,0 +1,22 @@
+{
+  "task": {
+    "id": "9BMHCuVnO01INm",
+    "type": "REPORT",
+    "componentId": "AXClO-fT2GZYAAU7vD3f",
+    "componentKey": "component.group.id:component-id",
+    "componentName": "component-name",
+    "componentQualifier": "TRK",
+    "analysisId": "zpBWPVtIZerEQqdqnHdA",
+    "status": "SUCCESS",
+    "submittedAt": "2020-03-23T14:16:28+0100",
+    "submitterLogin": "SOMEBODY",
+    "startedAt": "2020-03-23T14:16:30+0100",
+    "executedAt": "2020-03-23T14:16:31+0100",
+    "executionTimeMs": 1352,
+    "logs": false,
+    "hasScannerContext": true,
+    "organization": "default-organization",
+    "warningCount": 0,
+    "warnings": []
+  }
+}
