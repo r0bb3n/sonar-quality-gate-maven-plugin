@@ -33,6 +33,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -40,6 +41,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -160,13 +162,21 @@ public class SonarQualityGateMojo extends AbstractMojo {
     ProjectStatus projectStatus = parseContainer(ProjectStatusContainer.class, projStatJson);
     if (projectStatus.getStatus() != ProjectStatus.Status.OK) {
       String failedConditions = projectStatus.getConditions().stream()
-          .filter(c -> c.getStatus() != ProjectStatus.Status.OK)
-          .map(Condition::getMetricKey).collect(Collectors.joining(", "));
+          .filter(has(ProjectStatus.Status.OK, ProjectStatus.Status.NONE).negate())
+          .map(c -> c.getMetricKey() + ":" + c.getStatus()).collect(Collectors.joining(", "));
       throw new MojoFailureException(
-          String.format("Quality Gate not passed! Failed metric(s): %s", failedConditions));
+          String.format("Quality Gate not passed (status: %s)! Failed metric(s): %s",
+              projectStatus.getStatus(), failedConditions));
     } else {
       getLog().info("project status: " + projectStatus.getStatus());
     }
+  }
+
+  /**
+   * create a predicate to check, if a {@link Condition} has one of the supplied status
+   */
+  private static Predicate<Condition> has(ProjectStatus.Status... status) {
+    return c -> Arrays.asList(status).contains(c.getStatus());
   }
 
   /**
