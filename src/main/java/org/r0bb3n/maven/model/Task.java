@@ -15,7 +15,30 @@
  */
 package org.r0bb3n.maven.model;
 
-public enum Status {
-  OK,
-  ERROR
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+/**
+ * API Model, see https://github.com/SonarSource/sonarqube/blob/7.9.1/sonar-ws/src/main/protobuf/ws-ce.proto
+ */
+@Data
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Task {
+
+  String analysisId;
+  Status status;
+
+  @RequiredArgsConstructor
+  @Getter
+  public enum Status {
+    IN_PROGRESS(true),
+    PENDING(true),
+    SUCCESS(false),
+    CANCELED(false),
+    FAILED(false);
+
+    final boolean ongoing;
+  }
 }

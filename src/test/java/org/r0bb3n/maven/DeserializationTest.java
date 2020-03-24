@@ -15,7 +15,9 @@
  */
 package org.r0bb3n.maven;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.maven.plugin.logging.Log;
@@ -23,6 +25,7 @@ import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.junit.Before;
 import org.junit.Test;
 import org.r0bb3n.maven.model.ProjectStatusContainer;
+import org.r0bb3n.maven.model.TaskContainer;
 
 public class DeserializationTest {
 
@@ -35,12 +38,30 @@ public class DeserializationTest {
   }
 
   @Test
-  public void readJson() throws Exception {
-    ProjectStatusContainer projectStatusContainer = objectMapper
-        .readValue(DeserializationTest.class.getResource("/sonar-response-valid.json"),
+  public void readProjectStatusJson() throws Exception {
+    ProjectStatusContainer container = objectMapper
+        .readValue(DeserializationTest.class.getResource("/project_status-response-valid.json"),
             ProjectStatusContainer.class);
-    assertNotNull("no Container", projectStatusContainer);
-    assertNotNull("no project status", projectStatusContainer.getProjectStatus());
-    log.info(projectStatusContainer.getProjectStatus().toString());
+    assertNotNull("no Container", container);
+    assertSame("Container not right implemented", container.getProjectStatus(),
+        container.getContent());
+    assertNotNull("no project status", container.getProjectStatus());
+    log.info(container.getProjectStatus().toString());
   }
+
+  @Test
+  public void readTaskJson() throws Exception {
+    TaskContainer container = objectMapper
+        .readValue(DeserializationTest.class.getResource("/task-response-valid.json"),
+            TaskContainer.class);
+
+    assertNotNull("no Container", container);
+    assertNotNull("no task", container.getTask());
+    assertSame("Container not right implemented", container.getTask(),
+        container.getContent());
+    assertEquals("unexpected analysisId", "zpBWPVtIZerEQqdqnHdA",
+        container.getTask().getAnalysisId());
+    log.info(container.getTask().toString());
+  }
+
 }

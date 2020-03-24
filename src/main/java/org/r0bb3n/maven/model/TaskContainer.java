@@ -18,12 +18,12 @@ package org.r0bb3n.maven.model;
 import lombok.Data;
 
 @Data
-public class ProjectStatusContainer implements Container<ProjectStatus> {
+public class TaskContainer implements Container<Task> {
 
-  private ProjectStatus projectStatus;
+  private Task task;
 
   @Override
-  public ProjectStatus getContent() {
-    return projectStatus;
+  public Task getContent() {
+    return task;
   }
 }

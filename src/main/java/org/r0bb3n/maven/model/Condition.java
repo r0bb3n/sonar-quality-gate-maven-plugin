@@ -18,11 +18,14 @@ package org.r0bb3n.maven.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
+/**
+ * API Model, see https://github.com/SonarSource/sonarqube/blob/7.9.1/sonar-ws/src/main/protobuf/ws-qualitygates.proto
+ */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Condition {
 
-  private Status status;
+  private ProjectStatus.Status status;
   private String metricKey;
 //  private String comparator;
 //  private Integer periodIndex;
