@@ -112,6 +112,12 @@ This endpoint is used to retrieve the analysis id of a prior sonar-maven-plugin 
 **_prepare_** - manage `pom.xml` and create proper commits and tag
 
 ```
-mvn release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.0.0 -Dtag=v1.0.0
+mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.0.0 -Dtag=v1.0.0
+```
+
+**_clean_** - remove backup/work file
+
+```
+mvn -B release:clean
 ```
 
