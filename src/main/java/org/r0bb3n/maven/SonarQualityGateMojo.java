@@ -126,6 +126,13 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private int checkTaskIntervalS;
 
   /**
+   * INTERNAL - get build directory
+   */
+  @Parameter(defaultValue = "${project.build.directory}", readonly = true)
+  private String projectBuildDirectory;
+
+
+  /**
    * request project status from sonar and evaluate quality gate result
    *
    * @throws MojoExecutionException configuration errors, io problems, ...
@@ -220,7 +227,7 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * @throws MojoExecutionException io problems when reading sonar-maven-plugin file
    */
   private Optional<String> findCeTaskId() throws MojoExecutionException {
-    Path reportTaskPath = Path.of("target", "sonar", "report-task.txt");
+    Path reportTaskPath = Path.of(projectBuildDirectory, "sonar", "report-task.txt");
     if (!Files.exists(reportTaskPath)) {
       getLog().info("no report file from previously sonar-maven-plugin "
           + "run found: " + reportTaskPath);
