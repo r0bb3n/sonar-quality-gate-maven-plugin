@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+[unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.0.1...HEAD
+
+## [1.0.1]
+
+First version to be published to Maven Central. This requires some modification as
+ described in the [Sonatype Guide][sonatype-guide].
+
+### Added
+
+- provide `sources.jar` and `javadoc.jar` and signatures for all build artifacts automatically
+
+### Changed
+
+- `groupId` changed to `io.github.r0bb3n.maven` to enable maven central deployment
+
+[1.0.1]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.0.0...v1.0.1
+[sonatype-guide]: https://central.sonatype.org/pages/producers.html
+
 ## [1.0.0]
 
 ### Added
@@ -20,6 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - parameters renamed to avoid unintended interferences with sonar-maven-plugin parameters
 
+[1.0.0]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v0.1.0...v1.0.0
+
 ## [0.1.0]
 
 ### Added
@@ -27,7 +47,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - check project status in SonarQube based on supplied parameters (e.g. branch name)
 - authorization support for SonarQube
 
-
-[unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/releases/tag/v0.1.0
