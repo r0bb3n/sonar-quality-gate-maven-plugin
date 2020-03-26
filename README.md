@@ -115,6 +115,13 @@ This endpoint is used to retrieve the analysis id of a prior sonar-maven-plugin 
 mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.0.0 -Dtag=v1.0.0
 ```
 
+**_perform_** - take version tag and create binaries (currently without deploy)
+
+```
+mvn -B release:perform -Dgoals=verify -DreleaseProfiles=build-for-release
+```
+
+
 **_clean_** - remove backup/work file
 
 ```

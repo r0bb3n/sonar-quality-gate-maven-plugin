@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.0.1...HEAD
 
+## [1.0.2]
+
+First version to be published to Maven Central. This requires some modification as
+ described in the [Sonatype Guide][sonatype-guide].
+
+### Changed
+
+- `groupId` changed to `io.github.r0bb3n` to enable maven central deployment
+
+[1.0.2]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.0.1...v1.0.2
+
 ## [1.0.1]
 
 First version to be published to Maven Central. This requires some modification as
