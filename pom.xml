@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.r0bb3n.maven</groupId>
@@ -6,7 +8,10 @@
   <packaging>maven-plugin</packaging>
   <version>1-SNAPSHOT</version>
 
-  <name>sonar-quality-gate-maven-plugin Maven Mojo</name>
+  <name>Sonar Quality Gate Maven Plugin</name>
+  <description>The Sonar Quality Gate Maven Plugin checks the project status in SonarQube and fails
+    the maven job when the Quality Gate is not passed.
+  </description>
   <url>https://github.com/r0bb3n/sonar-quality-gate-maven-plugin</url>
 
   <licenses>
@@ -17,6 +22,13 @@
       <comments>Apache License, Version 2.0</comments>
     </license>
   </licenses>
+
+  <developers>
+    <developer>
+      <name>r0bb3n</name>
+      <url>https://github.com/r0bb3n</url>
+    </developer>
+  </developers>
 
   <scm>
     <url>https://github.com/r0bb3n/sonar-quality-gate-maven-plugin</url>
