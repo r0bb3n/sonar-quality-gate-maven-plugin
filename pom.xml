@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.github.r0bb3n</groupId>
@@ -46,8 +48,20 @@
     <url>https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/actions</url>
   </ciManagement>
 
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>${nexusUrl}/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>${nexusUrl}/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <nexusUrl>https://oss.sonatype.org</nexusUrl>
   </properties>
 
   <build>
@@ -80,9 +94,22 @@
       </plugin>
 
       <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <serverId>ossrh</serverId>
+          <nexusUrl>${nexusUrl}/</nexusUrl>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
+          <skipLocalStaging>true</skipLocalStaging>
+        </configuration>
+      </plugin>
+
+      <plugin>
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <tagNameFormat>v@{project.version}</tagNameFormat>
+          <releaseProfiles>build-for-release</releaseProfiles>
         </configuration>
       </plugin>
     </plugins>
@@ -98,6 +125,10 @@
           <version>3.8.1</version>
         </plugin>
         <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>3.0.0-M1</version>
+        </plugin>
+        <plugin>
           <artifactId>maven-gpg-plugin</artifactId>
           <version>1.6</version>
         </plugin>
@@ -109,10 +140,14 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>3.2.0</version>
         </plugin>
-
         <plugin>
           <artifactId>maven-release-plugin</artifactId>
           <version>3.0.0-M1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <version>1.6.8</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -170,6 +205,7 @@
               </execution>
             </executions>
           </plugin>
+
         </plugins>
       </build>
     </profile>

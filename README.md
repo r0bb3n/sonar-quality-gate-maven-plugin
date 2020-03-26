@@ -109,20 +109,20 @@ This endpoint is used to retrieve the analysis id of a prior sonar-maven-plugin 
 
 #### Release 
 
-**_prepare_** - manage `pom.xml` and create proper commits and tag
+**_prepare_** - manage `pom.xml` and create proper commits and tag and push to remote
 
 ```
 mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.0.0 -Dtag=v1.0.0
 ```
 
-**_perform_** - take version tag and create binaries (currently without deploy)
+**_perform_** - checkout version tag, create binaries and deploy via oss.sonatype.org to Maven Central
 
 ```
-mvn -B release:perform -Dgoals=verify -DreleaseProfiles=build-for-release
+mvn -B release:perform
 ```
 
 
-**_clean_** - remove backup/work file
+**_clean_** - remove backup/work file (useful if you ran prepare but not perform)
 
 ```
 mvn -B release:clean
