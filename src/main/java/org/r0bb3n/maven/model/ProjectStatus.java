@@ -19,7 +19,8 @@ import java.util.List;
 import lombok.Data;
 
 /**
- * API Model, see https://github.com/SonarSource/sonarqube/blob/7.9.1/sonar-ws/src/main/protobuf/ws-qualitygates.proto
+ * API Model, see <a href="https://github.com/SonarSource/sonarqube/blob/7.9.1/sonar-ws/src/main/protobuf/ws-qualitygates.proto">
+ * SonarQube source ws-qualitygates.proto</a>
  */
 @Data
 public class ProjectStatus {

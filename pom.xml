@@ -1,12 +1,17 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.r0bb3n.maven</groupId>
+  <groupId>io.github.r0bb3n.maven</groupId>
   <artifactId>sonar-quality-gate-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <version>1-SNAPSHOT</version>
 
-  <name>sonar-quality-gate-maven-plugin Maven Mojo</name>
+  <name>Sonar Quality Gate Maven Plugin</name>
+  <description>The Sonar Quality Gate Maven Plugin checks the project status in SonarQube and fails
+    the maven job when the Quality Gate is not passed.
+  </description>
   <url>https://github.com/r0bb3n/sonar-quality-gate-maven-plugin</url>
 
   <licenses>
@@ -17,6 +22,13 @@
       <comments>Apache License, Version 2.0</comments>
     </license>
   </licenses>
+
+  <developers>
+    <developer>
+      <name>r0bb3n</name>
+      <url>https://github.com/r0bb3n</url>
+    </developer>
+  </developers>
 
   <scm>
     <url>https://github.com/r0bb3n/sonar-quality-gate-maven-plugin</url>
@@ -88,12 +100,83 @@
           <version>3.8.1</version>
         </plugin>
         <plugin>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>1.6</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.2.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.2.0</version>
+        </plugin>
+
+        <plugin>
           <artifactId>maven-release-plugin</artifactId>
           <version>3.0.0-M1</version>
         </plugin>
       </plugins>
     </pluginManagement>
   </build>
+
+  <profiles>
+    <profile>
+      <id>build-for-release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>build-sources-jar</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <configuration>
+              <doclint>none</doclint>
+              <show>private</show>
+            </configuration>
+            <executions>
+              <execution>
+                <id>build-javadoc-jar</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+                <configuration>
+                  <!-- enable passphrase handling via plugin -->
+                  <gpgArguments>
+                    <arg>--pinentry-mode</arg>
+                    <arg>loopback</arg>
+                  </gpgArguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+  </profiles>
 
   <dependencies>
     <dependency>

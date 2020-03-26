@@ -21,7 +21,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * API Model, see https://github.com/SonarSource/sonarqube/blob/7.9.1/sonar-ws/src/main/protobuf/ws-ce.proto
+ * API Model, see <a href="https://github.com/SonarSource/sonarqube/blob/7.9.1/sonar-ws/src/main/protobuf/ws-ce.proto">
+ * SonarQube source ws-ce.proto</a>
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
