@@ -25,6 +25,7 @@ jobs:
     - name: Sonar Analysis with Maven (sonarcloud.io)
       if: github.event_name == 'push'
       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
       run: mvn --file pom.xml --batch-mode sonar:sonar -Dsonar.login=$SONARCLOUD_TOKEN
     - name: Upload to CoPilot
