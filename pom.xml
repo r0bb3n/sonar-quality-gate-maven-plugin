@@ -61,7 +61,11 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>11</maven.compiler.release>
     <nexusUrl>https://oss.sonatype.org</nexusUrl>
+    <sonar.organization>r0bb3n</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <sonar.java.source>${maven.compiler.release}</sonar.java.source>
   </properties>
 
   <build>
@@ -84,13 +88,6 @@
             <phase>process-classes</phase>
           </execution>
         </executions>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <release>11</release>
-        </configuration>
       </plugin>
 
       <plugin>
@@ -143,6 +140,11 @@
         <plugin>
           <artifactId>maven-release-plugin</artifactId>
           <version>3.0.0-M1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>3.7.0.1746</version>
         </plugin>
         <plugin>
           <groupId>org.sonatype.plugins</groupId>
