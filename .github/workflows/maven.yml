@@ -22,3 +22,6 @@ jobs:
         java-version: 11
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+    - name: Upload to CoPilot
+      if: github.event_name == 'push' || github.event_name == 'pull_request'
+      run: bash <(curl -s https://copilot.blackducksoftware.com/ci/githubactions/scripts/upload)
