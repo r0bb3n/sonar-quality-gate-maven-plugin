@@ -324,7 +324,7 @@ public class SonarQualityGateMojo extends AbstractMojo {
     String json = response.body();
     if (getLog().isDebugEnabled()) {
       getLog().debug(
-          String.format("Response from Sonar (HTTP Status: %d):\n%s", response.statusCode(), json));
+          String.format("Response from Sonar (HTTP Status: %d):%n%s", response.statusCode(), json));
     }
     if (response.statusCode() != HttpURLConnection.HTTP_OK) {
       throw new MojoExecutionException(String
