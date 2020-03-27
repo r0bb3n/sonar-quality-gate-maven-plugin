@@ -22,6 +22,23 @@ There a three modes supported:
 
 ## Usage
 
+Include the plugin declaration in your `pom.xml` either in `<build><pluginManagement><plugins>` for
+calling it only explicitly on CLI or in `<build><plugins>` to integrate it automatically in your build.  
+
+```xml
+<plugin>
+  <groupId>io.github.r0bb3n</groupId>
+  <artifactId>sonar-quality-gate-maven-plugin</artifactId>
+  <version>1.0.2</version>
+</plugin>
+```
+
+You can also use it without changing your `pom.xml` by calling it fully qualified on CLI:
+
+```
+mvn io.github.r0bb3n:sonar-quality-gate-maven-plugin:1.0.2:check
+```
+
 **Integrated mode**
 
 ```
@@ -112,7 +129,7 @@ This endpoint is used to retrieve the analysis id of a prior sonar-maven-plugin 
 **_prepare_** - manage `pom.xml` and create proper commits and tag and push to remote
 
 ```
-mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.0.0 -Dtag=v1.0.0
+mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.0.2 -Dtag=v1.0.2
 ```
 
 **_perform_** - checkout version tag, create binaries and deploy via oss.sonatype.org to Maven Central
