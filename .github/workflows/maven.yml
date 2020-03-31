@@ -15,7 +15,9 @@ jobs:
         with:
           # payload schema: https://developer.github.com/v3/activity/events/types/#pullrequestevent
           script: |
-            console.log("context.payload.pull_request: " + context.payload.pull_request);
+            //console.log("context.payload.pull_request: " + JSON.stringify(context.payload.pull_request));
+            console.log("context.payload.pull_request.diff_url: " + context.payload.pull_request.diff_url);
+            console.log("context.payload.pull_request[head]: " + context.payload.pull_request["head"]);
 #            console.log("context.payload.number: " + context.payload.number);
       - name: Set up JDK 11
         uses: actions/setup-java@v1
