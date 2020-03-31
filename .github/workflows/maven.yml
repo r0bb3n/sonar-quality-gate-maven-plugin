@@ -2,7 +2,7 @@
 
 name: Maven Build
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build:
@@ -30,11 +30,14 @@ jobs:
         with:
           # payload schema: https://developer.github.com/v3/activity/events/types/#pullrequestevent
           script: |
-            const prNumber = context.number;
+            console.log("context.payload: " + context.payload);
+            const prNumber = context.payload.number;
             core.exportVariable('PULL_REQUEST_NUMBER', prNumber);
-            const branchName = context.pull_request.head.ref;
+            console.log("PR Number found: " + prNumber);
+            console.log("context.payload.pull_request: " + JSON.stringify(context.payload.pull_request));
+            const branchName = context.payload.pull_request.head.ref;
             core.exportVariable('PULL_REQUEST_BRANCH_NAME', branchName);
-            const targetBranchName = context.pull_request.base.ref;
+            const targetBranchName = context.payload.pull_request.base.ref;
             core.exportVariable('PULL_REQUEST_TARGET_BRANCH_NAME', targetBranchName);
       - name: Build with Maven
         run: mvn --file pom.xml --batch-mode package
