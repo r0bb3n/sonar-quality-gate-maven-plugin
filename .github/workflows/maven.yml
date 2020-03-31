@@ -1,33 +1,54 @@
-# This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+# CI job that builds, tests and analyzes the branch / pull requets
 
 name: Maven Build
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 11
-      uses: actions/setup-java@v1
-      with:
-        java-version: 11
-    - name: Build with Maven
-      run: mvn --file pom.xml --batch-mode package
-    - name: Sonar Analysis with Maven (sonarcloud.io)
-      if: github.event_name == 'push'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
-      run: mvn --file pom.xml --batch-mode sonar:sonar -Dsonar.login=$SONARCLOUD_TOKEN
-    - name: Upload to CoPilot
-      if: github.event_name == 'push' || github.event_name == 'pull_request'
-      run: bash <(curl -s https://copilot.blackducksoftware.com/ci/githubactions/scripts/upload)
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Read Pull Request Coordinates
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@0.9.0
+        with:
+#          github-token: ${{github.token}}
+          # payload schema: https://developer.github.com/v3/activity/events/types/#pullrequestevent
+          script: |
+            const core = require('@actions/core');
+            const prNumber = context.payload.number;
+            core.exportVariable('PR_NUMBER', prNumber);
+      - name: Build with Maven
+        run: mvn --file pom.xml --batch-mode package
+      - name: Sonar Analysis with Maven (sonarcloud.io) - Branch
+        if: github.event_name == 'push'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+        run: |
+          mvn --file pom.xml --batch-mode sonar:sonar \
+          -Dsonar.login=$SONARCLOUD_TOKEN \
+          -Dsonar.branch.name=${{ github.ref }}
+      - name: Sonar Analysis with Maven (sonarcloud.io) - Pull Request
+        # github.head_ref The head_ref or source branch of the pull request in a workflow run.
+        # github.base_ref The base_ref or target branch of the pull request in a workflow run.
+        if: github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+        run: |
+          mvn --file pom.xml --batch-mode sonar:sonar \
+          -Dsonar.login=$SONARCLOUD_TOKEN \
+          -Dsonar.pullrequest.branch=${{ github.head_ref }} \
+          -Dsonar.pullrequest.base=${{ github.base_ref }} \
+          -Dsonar.pullrequest.key=$PR_NUMBER
+      - name: Upload to CoPilot
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        run: bash <(curl -s https://copilot.blackducksoftware.com/ci/githubactions/scripts/upload)
