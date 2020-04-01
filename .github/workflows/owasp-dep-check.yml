@@ -4,8 +4,8 @@ name: OWASP Dependency Checker
 
 on:
   schedule:
-#    - cron:  '42 5 * * 5'
-    - cron:  '40 11 1 4 *'
+    - cron:  '42 5 * * 5'
+#    - cron:  '40 11 1 4 *'
 
 jobs:
   check:
@@ -29,7 +29,7 @@ jobs:
         run: |
           if [[ "$POM_THIS_HASH" == "$POM_V102_HASH" ]]
           then
-            echo "::warning file=pom.xml::pom.xml is from version 1.0.2, which does not support the required profile. Skipping check."
+            echo "::warning file=pom.xml::pom.xml of latest tag is from version 1.0.2, which does not support the required profile. Skipping check."
             exit 0
           fi
           mvn --file pom.xml --batch-mode \
