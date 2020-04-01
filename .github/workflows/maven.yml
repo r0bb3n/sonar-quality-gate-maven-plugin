@@ -4,7 +4,13 @@ name: Maven Build
 
 on:
   pull_request:
+    paths-ignore: 
+      - '.github/**'
+      - '!.github/workflows/maven.yml'
   push:
+    paths-ignore: 
+      - '.github/**'
+      - '!.github/workflows/maven.yml'
     # disable temporary
     branches-ignore:
       - 'bugfix/GH-16*'
