@@ -1,0 +1,17 @@
+name: Playground
+
+on:
+  push:
+    branches-ignore:
+      - '**'
+
+jobs:
+  one:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: print hash
+        if: false
+        run: |
+          echo inline hash - ${{ hashFiles('pom.xml') }}

@@ -5,7 +5,7 @@ name: OWASP Dependency Checker
 on:
   schedule:
 #    - cron:  '42 5 * * 5'
-    - cron:  '7 9 1 4 *'
+    - cron:  '7 10 1 4 *'
 
 jobs:
   check:
@@ -22,11 +22,17 @@ jobs:
         with:
           ref: latest
       - name: Run OWASP Dependency Checker for `latest`
-        run: mvn --file pom.xml --batch-mode dependency-check:check -P vuln-check
+        # don't run for version 1.0.2 since it has no proper profile
+        if: hashFiles('pom.xml') != '026b2554c3d5788bb55d2e70d41ec92c7d530138d8586d1f3ee0fd16e4e95662'
+        run: |
+          mvn --file pom.xml --batch-mode \
+            dependency-check:check -P vuln-check
       - name: Checkout `master` branch
         uses: actions/checkout@v2
         with:
           ref: master
           clean: true
       - name: Run OWASP Dependency Checker for `master`
-        run: mvn --file pom.xml --batch-mode dependency-check:check -P vuln-check
+        run: |
+          mvn --file pom.xml --batch-mode \
+            dependency-check:check -P vuln-check
