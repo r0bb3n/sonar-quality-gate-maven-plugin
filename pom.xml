@@ -62,10 +62,14 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>11</maven.compiler.release>
+
     <nexusUrl>https://oss.sonatype.org</nexusUrl>
+
     <sonar.organization>r0bb3n</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.java.source>${maven.compiler.release}</sonar.java.source>
+
+    <version.jackson>2.10.3</version.jackson>
   </properties>
 
   <build>
@@ -86,6 +90,25 @@
               <goal>helpmojo</goal>
             </goals>
             <phase>process-classes</phase>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>analyze</id>
+            <goals>
+              <goal>analyze-only</goal>
+            </goals>
+            <configuration>
+              <failOnWarning>true</failOnWarning>
+              <outputXML>true</outputXML>
+              <ignoredDependencies>
+                <ignoredDependency>org.projectlombok:lombok::</ignoredDependency>
+              </ignoredDependencies>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -120,6 +143,10 @@
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.8.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.1.2</version>
         </plugin>
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
@@ -257,7 +284,17 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.10.3</version>
+      <version>${version.jackson}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${version.jackson}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${version.jackson}</version>
     </dependency>
 
     <dependency>
