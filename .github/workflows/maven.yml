@@ -3,6 +3,11 @@
 name: Maven Build
 
 on: [push, pull_request]
+# disable temporary
+#on:
+#  push:
+#    branches-ignore:
+#      - '**'
 
 jobs:
   build:
