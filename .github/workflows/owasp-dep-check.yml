@@ -34,6 +34,11 @@ jobs:
           fi
           mvn --file pom.xml --batch-mode \
             dependency-check:check -P vuln-check
+      - name: Upload dependency report for latest tag
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: dep-report-latest
+          path: target/dependency-check-report.html
       - name: Checkout `master` branch
         uses: actions/checkout@v2
         with:
@@ -43,3 +48,8 @@ jobs:
         run: |
           mvn --file pom.xml --batch-mode \
             dependency-check:check -P vuln-check
+      - name: Upload dependency report for master branch
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: dep-report-master
+          path: target/dependency-check-report.html
