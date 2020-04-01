@@ -2,7 +2,7 @@ name: Playground
 
 on:
   push:
-    branch:
+    branches:
       - 'bugfix/GH-16_*'
 #    branches-ignore:
 #      - '**'
