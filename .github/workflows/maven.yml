@@ -2,11 +2,12 @@
 
 name: Maven Build
 
-on: [push, pull_request]
-# disable temporary
-#on:
-#  push:
-#    branches-ignore:
+on:
+  pull_request:
+  push:
+    # disable temporary
+    branches-ignore:
+      - 'bugfix/GH-16*'
 #      - '**'
 
 jobs:
