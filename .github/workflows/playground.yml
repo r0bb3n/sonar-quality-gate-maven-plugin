@@ -2,8 +2,10 @@ name: Playground
 
 on:
   push:
-    branches-ignore:
-      - '**'
+    branch:
+      - 'bugfix/GH-16_*'
+#    branches-ignore:
+#      - '**'
 
 jobs:
   one:
@@ -15,3 +17,21 @@ jobs:
         if: false
         run: |
           echo inline hash - ${{ hashFiles('pom.xml') }}
+      - name: Check hash
+        if: false
+        env:
+          POM_V102_HASH: 026b2554c3d5788bb55d2e70d41ec92c7d530138d8586d1f3ee0fd16e4e95662
+          POM_MASTER_HASH: fdbfc2d7b48f2ef6dbb56e9f971d916b6efb1ff6e1788f739d907101320ee568
+          POM_THIS_HASH: ${{ hashFiles('pom.xml') }}
+        run: |
+          if [[ "$POM_THIS_HASH" == "$POM_MASTER_HASH" ]]
+          then
+            echo is master pom
+            echo "::warning file=pom.xml::pom.xml is the master"
+            exit 0
+          fi
+          if [[ "$POM_THIS_HASH" == "$POM_V102_HASH" ]]
+          then
+            echo is v1.0.2 pom
+          fi
+          echo the end

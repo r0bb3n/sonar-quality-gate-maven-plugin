@@ -5,7 +5,7 @@ name: OWASP Dependency Checker
 on:
   schedule:
 #    - cron:  '42 5 * * 5'
-    - cron:  '12 10 1 4 *'
+    - cron:  '40 11 1 4 *'
 
 jobs:
   check:
@@ -23,8 +23,15 @@ jobs:
           ref: latest
       - name: Run OWASP Dependency Checker for `latest`
         # don't run for version 1.0.2 since it has no proper profile
-        if: hashFiles('pom.xml') != '026b2554c3d5788bb55d2e70d41ec92c7d530138d8586d1f3ee0fd16e4e95662'
+        env:
+          POM_V102_HASH: 026b2554c3d5788bb55d2e70d41ec92c7d530138d8586d1f3ee0fd16e4e95662
+          POM_THIS_HASH: ${{ hashFiles('pom.xml') }}
         run: |
+          if [[ "$POM_THIS_HASH" == "$POM_V102_HASH" ]]
+          then
+            echo "::warning file=pom.xml::pom.xml is from version 1.0.2, which does not support the required profile. Skipping check."
+            exit 0
+          fi
           mvn --file pom.xml --batch-mode \
             dependency-check:check -P vuln-check
       - name: Checkout `master` branch
