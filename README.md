@@ -1,6 +1,7 @@
 # Sonar Quality Gate Maven Plugin
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.r0bb3n/sonar-quality-gate-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.r0bb3n/sonar-quality-gate-maven-plugin)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=io.github.r0bb3n%3Asonar-quality-gate-maven-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=io.github.r0bb3n%3Asonar-quality-gate-maven-plugin)
 [![Black Duck Security Risk](https://copilot.blackducksoftware.com/github/repos/r0bb3n/sonar-quality-gate-maven-plugin/branches/master/badge-risk.svg)](https://copilot.blackducksoftware.com/github/repos/r0bb3n/sonar-quality-gate-maven-plugin/branches/master)
 ![Maven Build](https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/workflows/Maven%20Build/badge.svg)
 
