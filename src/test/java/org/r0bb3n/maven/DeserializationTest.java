@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.r0bb3n.maven;
 
 import static org.junit.Assert.assertEquals;
@@ -57,8 +58,7 @@ public class DeserializationTest {
 
     assertNotNull("no Container", container);
     assertNotNull("no task", container.getTask());
-    assertSame("Container not right implemented", container.getTask(),
-        container.getContent());
+    assertSame("Container not right implemented", container.getTask(), container.getContent());
     assertEquals("unexpected analysisId", "zpBWPVtIZerEQqdqnHdA",
         container.getTask().getAnalysisId());
     log.info(container.getTask().toString());

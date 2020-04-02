@@ -4,5 +4,8 @@ pom.xml.*
 release.properties
 
 # IntelliJ
-.idea/
+.idea/*
 *.iml
+
+!.idea/fileTemplates/
+!.idea/codeStyles/

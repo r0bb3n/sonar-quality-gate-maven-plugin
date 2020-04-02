@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.r0bb3n.maven.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 /**
- * API Model, see <a href="https://github.com/SonarSource/sonarqube/blob/7.9.1/sonar-ws/src/main/protobuf/ws-qualitygates.proto">
+ * API Model, see
+ * <a href="https://github.com/SonarSource/sonarqube/blob/7.9.1/sonar-ws/src/main/protobuf/ws-qualitygates.proto">
  * SonarQube source ws-qualitygates.proto</a>
  */
 @Data

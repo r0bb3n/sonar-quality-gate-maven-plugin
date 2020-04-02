@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 r0bb3n
+ * Copyright ${YEAR} r0bb3n
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.r0bb3n.maven.model;
-
-import lombok.Data;
-
-@Data
-public class TaskContainer implements Container<Task> {
-
-  private Task task;
-
-  @Override
-  public Task getContent() {
-    return task;
-  }
-}
+ 
+ 

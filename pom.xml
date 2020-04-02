@@ -68,6 +68,8 @@
     <sonar.organization>r0bb3n</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.java.source>${maven.compiler.release}</sonar.java.source>
+    <sonar.java.checkstyle.reportPaths>target/checkstyle-result.xml</sonar.java.checkstyle.reportPaths>
+    <sonar.exclusions>.idea/**</sonar.exclusions>
 
     <version.jackson>2.10.3</version.jackson>
   </properties>
@@ -90,6 +92,9 @@
               <goal>helpmojo</goal>
             </goals>
             <phase>process-classes</phase>
+            <configuration>
+              <helpPackageName>org.r0bb3n.maven.generated</helpPackageName>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -169,6 +174,19 @@
           <version>3.0.0-M1</version>
         </plugin>
         <plugin>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>3.1.1</version>
+          <configuration>
+            <configLocation>checkstyle-configuration.xml</configLocation>
+            <enableRSS>false</enableRSS>
+            <linkXRef>false</linkXRef>
+            <failOnViolation>false</failOnViolation>
+            <failsOnError>false</failsOnError>
+            <!-- excludes works only on package level -->
+            <excludes>**/generated/**/*.java</excludes>
+          </configuration>
+        </plugin>
+        <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>
           <artifactId>sonar-maven-plugin</artifactId>
           <version>3.7.0.1746</version>
@@ -182,6 +200,10 @@
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
           <version>5.3.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.7.1</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -245,6 +267,30 @@
     </profile>
 
     <profile>
+      <!-- continuous integration profile that enables additional checks and analyses -->
+      <!-- mainly used for sonar analysis supplies -->
+      <id>ci-run</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>check-sources</id>
+                <goals>
+                  <goal>checkstyle</goal>
+                </goals>
+                <phase>verify</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <!-- checks dependencies for vulnerabilities and fails maven job -->
+      <!-- this job is triggered time based on CI server -->
       <id>vuln-check</id>
       <build>
         <plugins>

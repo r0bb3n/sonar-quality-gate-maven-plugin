@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.r0bb3n.maven;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -86,11 +87,13 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * <a href="https://docs.sonarqube.org/latest/analysis/analysis-parameters/">SonarQube - Analysis
    * Parameters</a>
    */
-  @Parameter(property = "sonar.projectKey", defaultValue = "${project.groupId}:${project.artifactId}")
+  @Parameter(property = "sonar.projectKey",
+      defaultValue = "${project.groupId}:${project.artifactId}")
   private String sonarProjectKey;
 
   /**
-   * sonar login (username or token), see also <a href="https://docs.sonarqube.org/latest/extend/web-api/">SonarQube
+   * sonar login (username or token), see also
+   * <a href="https://docs.sonarqube.org/latest/extend/web-api/">SonarQube
    * - Web API Authentication</a> <br/> aligned to sonar-maven-plugin analysis parameters, see also
    * <a href="https://docs.sonarqube.org/latest/analysis/analysis-parameters/">SonarQube - Analysis
    * Parameters</a>
@@ -169,8 +172,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
       String failedConditions = projectStatus.getConditions().stream()
           .filter(has(ProjectStatus.Status.OK, ProjectStatus.Status.NONE).negate())
           .map(c -> c.getMetricKey() + ":" + c.getStatus()).collect(Collectors.joining(", "));
-      throw new MojoFailureException(
-          String.format("Quality Gate not passed (status: %s)! Failed metric(s): %s",
+      throw new MojoFailureException(String
+          .format("Quality Gate not passed (status: %s)! Failed metric(s): %s",
               projectStatus.getStatus(), failedConditions));
     } else {
       getLog().info("project status: " + projectStatus.getStatus());
@@ -227,9 +230,10 @@ public class SonarQualityGateMojo extends AbstractMojo {
     }
     if (analysisId == null) {
       throw new MojoExecutionException(String.format(
-          "Could not fetch analysis id within %d requests with an interval of %d seconds (last status: %s). Please "
-              + "increase the values 'checkTaskAttempts' and/or 'checkTaskIntervalS' to fit your projects needs.",
-          checkTaskAttempts, checkTaskIntervalS, status));
+          "Could not fetch analysis id within %d requests with an interval of %d seconds (last "
+              + "status: %s). Please increase the values 'checkTaskAttempts' and/or "
+              + "'checkTaskIntervalS' to fit your projects needs.", checkTaskAttempts,
+          checkTaskIntervalS, status));
     }
 
     return analysisId;
@@ -244,8 +248,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private Optional<String> findCeTaskId() throws MojoExecutionException {
     Path reportTaskPath = Path.of(projectBuildDirectory, "sonar", "report-task.txt");
     if (!Files.exists(reportTaskPath)) {
-      getLog().info("no report file from previously sonar-maven-plugin "
-          + "run found: " + reportTaskPath);
+      getLog()
+          .info("no report file from previously sonar-maven-plugin run found: " + reportTaskPath);
       return Optional.empty();
     }
     String ceTaskId;
@@ -258,9 +262,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
           String.format("Error parsing properties in: %s", reportTaskPath), e);
     }
     if (isBlank(ceTaskId)) {
-      throw new MojoExecutionException(
-          String.format("Property '%s' not found in '%s'", REPORT_TASK_KEY_CE_TASK_ID,
-              reportTaskPath));
+      throw new MojoExecutionException(String
+          .format("Property '%s' not found in '%s'", REPORT_TASK_KEY_CE_TASK_ID, reportTaskPath));
     } else {
       return Optional.of(ceTaskId);
     }
@@ -274,8 +277,7 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * @param analysisId analysisId or {@code null}
    * @throws MojoExecutionException URI could not be created
    */
-  private URI createProjectStatusRequestUri(String analysisId)
-      throws MojoExecutionException {
+  private URI createProjectStatusRequestUri(String analysisId) throws MojoExecutionException {
     Map<String, String> params;
     if (analysisId != null) {
       // 'integrated' mode
@@ -300,16 +302,13 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * @param resourceUri resource to get
    * @throws MojoExecutionException io problems or interrupted
    */
-  private String retrieveResponse(URI resourceUri)
-      throws MojoExecutionException {
+  private String retrieveResponse(URI resourceUri) throws MojoExecutionException {
     getLog().info("Sonar Web API call: " + resourceUri);
 
     HttpClient client = HttpClient.newHttpClient();
-    HttpRequest request = createRequestBuilder()
-        .GET().uri(resourceUri)
-        .timeout(Duration.ofMinutes(1))
-        .header(HEADER_NAME_CONTENT_TYPE, "application/json")
-        .build();
+    HttpRequest request =
+        createRequestBuilder().GET().uri(resourceUri).timeout(Duration.ofMinutes(1))
+            .header(HEADER_NAME_CONTENT_TYPE, "application/json").build();
     HttpResponse<String> response;
     try {
       response = client.send(request, BodyHandlers.ofString());
@@ -361,10 +360,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
     try {
       return URI.create(urlBuilder.toString());
     } catch (IllegalArgumentException e) {
-      throw new MojoExecutionException(
-          String
-              .format("Cannot parse value of '%s' properly: %s", PROP_SONAR_HOST_URL, sonarHostUrl),
-          e);
+      throw new MojoExecutionException(String
+          .format("Cannot parse value of '%s' properly: %s", PROP_SONAR_HOST_URL, sonarHostUrl), e);
     }
   }
 
@@ -375,8 +372,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * @return URL-ready query parameter
    */
   private String toQueryEntry(Map.Entry<String, String> entry) {
-    return URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8) + "=" +
-        URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8);
+    return URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8) + "=" + URLEncoder
+        .encode(entry.getValue(), StandardCharsets.UTF_8);
   }
 
   /**
@@ -393,9 +390,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
         ret.header(HEADER_NAME_AUTHORIZATION, basicAuth(sonarLogin, sonarPassword));
       }
     } else if (!isBlank(sonarPassword)) {
-      throw new MojoExecutionException(
-          String.format("you cannot specify '%s' without '%s'", PROP_SONAR_PASSWORD,
-              PROP_SONAR_LOGIN));
+      throw new MojoExecutionException(String
+          .format("you cannot specify '%s' without '%s'", PROP_SONAR_PASSWORD, PROP_SONAR_LOGIN));
     }
     return ret;
   }
