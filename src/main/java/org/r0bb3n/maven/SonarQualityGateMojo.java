@@ -248,8 +248,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private Optional<String> findCeTaskId() throws MojoExecutionException {
     Path reportTaskPath = Path.of(projectBuildDirectory, "sonar", "report-task.txt");
     if (!Files.exists(reportTaskPath)) {
-      getLog().info(
-          "no report file from previously sonar-maven-plugin " + "run found: " + reportTaskPath);
+      getLog()
+          .info("no report file from previously sonar-maven-plugin run found: " + reportTaskPath);
       return Optional.empty();
     }
     String ceTaskId;
