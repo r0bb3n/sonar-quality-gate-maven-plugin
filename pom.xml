@@ -91,6 +91,9 @@
               <goal>helpmojo</goal>
             </goals>
             <phase>process-classes</phase>
+            <configuration>
+              <helpPackageName>org.r0bb3n.maven.generated</helpPackageName>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -176,6 +179,10 @@
             <configLocation>google_checks.xml</configLocation>
             <enableRSS>false</enableRSS>
             <linkXRef>false</linkXRef>
+            <failOnViolation>false</failOnViolation>
+            <failsOnError>false</failsOnError>
+            <!-- excludes works only on package level -->
+            <excludes>**/generated/**/*.java</excludes>
           </configuration>
         </plugin>
         <plugin>
