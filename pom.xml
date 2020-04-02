@@ -69,6 +69,7 @@
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.java.source>${maven.compiler.release}</sonar.java.source>
     <sonar.java.checkstyle.reportPaths>target/checkstyle-result.xml</sonar.java.checkstyle.reportPaths>
+    <sonar.exclusions>.idea/**</sonar.exclusions>
 
     <version.jackson>2.10.3</version.jackson>
   </properties>
