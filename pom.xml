@@ -174,6 +174,8 @@
           <version>3.1.1</version>
           <configuration>
             <configLocation>google_checks.xml</configLocation>
+            <enableRSS>false</enableRSS>
+            <linkXRef>false</linkXRef>
           </configuration>
         </plugin>
         <plugin>
