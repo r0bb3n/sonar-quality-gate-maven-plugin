@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.r0bb3n.maven;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
