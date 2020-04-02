@@ -58,8 +58,7 @@ public class DeserializationTest {
 
     assertNotNull("no Container", container);
     assertNotNull("no task", container.getTask());
-    assertSame("Container not right implemented", container.getTask(),
-        container.getContent());
+    assertSame("Container not right implemented", container.getTask(), container.getContent());
     assertEquals("unexpected analysisId", "zpBWPVtIZerEQqdqnHdA",
         container.getTask().getAnalysisId());
     log.info(container.getTask().toString());
