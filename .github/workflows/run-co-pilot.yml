@@ -1,0 +1,32 @@
+# CI job that runs co-pilot for master and pull requests
+
+name: Run BlackDuck Co-Pilot
+
+on:
+  pull_request:
+    paths-ignore: 
+      - '.github/**'
+      - '!.github/workflows/run-co-pilot.yml'
+      - '.idea/**'
+  push:
+    branches:
+      - 'master'
+    paths-ignore: 
+      - '.github/**'
+      - '!.github/workflows/run-co-pilot.yml'
+      - '.idea/**'
+
+jobs:
+
+  run-co-pilot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Upload to CoPilot
+        run: bash <(curl -s https://copilot.blackducksoftware.com/ci/githubactions/scripts/upload)
