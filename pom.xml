@@ -70,6 +70,7 @@
     <sonar.java.source>${maven.compiler.release}</sonar.java.source>
     <sonar.java.checkstyle.reportPaths>target/checkstyle-result.xml</sonar.java.checkstyle.reportPaths>
     <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    <sonar.java.pmd.reportPaths>target/pmd.xml,target/cpd.xml</sonar.java.pmd.reportPaths>
     <sonar.exclusions>.idea/**</sonar.exclusions>
 
     <version.jackson>2.10.3</version.jackson>
@@ -197,6 +198,19 @@
           </configuration>
         </plugin>
         <plugin>
+          <artifactId>maven-pmd-plugin</artifactId>
+          <version>3.13.0</version>
+          <configuration>
+            <targetJdk>${maven.compiler.release}</targetJdk>
+            <linkXRef>false</linkXRef>
+            <failOnViolation>false</failOnViolation>
+            <printFailingErrors>true</printFailingErrors>
+            <excludes>
+              <exclude>**/generated/**/*.java</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+        <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>
           <artifactId>sonar-maven-plugin</artifactId>
           <version>3.7.0.1746</version>
@@ -308,6 +322,18 @@
                 <id>check-sources</id>
                 <goals>
                   <goal>checkstyle</goal>
+                </goals>
+                <phase>verify</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>check</goal>
+                  <goal>cpd-check</goal>
                 </goals>
                 <phase>verify</phase>
               </execution>
