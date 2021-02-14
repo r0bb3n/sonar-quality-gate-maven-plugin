@@ -31,6 +31,7 @@ jobs:
         run: |
           git fetch --prune --unshallow
       - name: Read Git Coordinates - Branch
+        id: push-branch-name
         if: github.event_name == 'push'
         uses: actions/github-script@0.9.0
         with:
@@ -38,16 +39,17 @@ jobs:
           script: |
             const fullGitRef = context.ref;
             const branchName = fullGitRef.replace(/refs\/\w+\//i,'');
-            core.exportVariable('PUSH_BRANCH_NAME', branchName);
+            core.setOutput('PUSH_BRANCH_NAME', branchName);
       - name: Read Git Coordinates - Pull Request
+        id: pull-request-name
         if: github.event_name == 'pull_request'
         uses: actions/github-script@0.9.0
         with:
           # payload schema: https://developer.github.com/v3/activity/events/types/#pullrequestevent
           script: |
-            core.exportVariable('PULL_REQUEST_SOURCE_BRANCH_NAME', context.payload.pull_request.head.ref);
-            core.exportVariable('PULL_REQUEST_TARGET_BRANCH_NAME', context.payload.pull_request.base.ref);
-            core.exportVariable('PULL_REQUEST_NUMBER', context.payload.number.toString());
+            core.setOutput('PULL_REQUEST_SOURCE_BRANCH_NAME', context.payload.pull_request.head.ref);
+            core.setOutput('PULL_REQUEST_TARGET_BRANCH_NAME', context.payload.pull_request.base.ref);
+            core.setOutput('PULL_REQUEST_NUMBER', context.payload.number.toString());
       - name: Build with Maven
         run: |
           mvn --file pom.xml --batch-mode \
@@ -61,7 +63,7 @@ jobs:
           mvn --file pom.xml --batch-mode \
             sonar:sonar \
             -Dsonar.login=$SONARCLOUD_TOKEN \
-            -Dsonar.branch.name=$PUSH_BRANCH_NAME
+            -Dsonar.branch.name=${{ steps.push-branch-name.outputs.PUSH_BRANCH_NAME }}
       - name: Sonar Analysis with Maven (sonarcloud.io) - Pull Request
         if: github.event_name == 'pull_request'
         env:
@@ -71,6 +73,6 @@ jobs:
           mvn --file pom.xml --batch-mode \
             sonar:sonar \
             -Dsonar.login=$SONARCLOUD_TOKEN \
-            -Dsonar.pullrequest.branch=$PULL_REQUEST_SOURCE_BRANCH_NAME \
-            -Dsonar.pullrequest.base=$PULL_REQUEST_TARGET_BRANCH_NAME \
-            -Dsonar.pullrequest.key=$PULL_REQUEST_NUMBER
+            -Dsonar.pullrequest.branch=${{ steps.pull-request-name.outputs.PULL_REQUEST_SOURCE_BRANCH_NAME }} \
+            -Dsonar.pullrequest.base=${{ steps.pull-request-name.outputs.PULL_REQUEST_TARGET_BRANCH_NAME }} \
+            -Dsonar.pullrequest.key=${{ steps.pull-request-name.outputs.PULL_REQUEST_NUMBER }}
