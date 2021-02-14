@@ -13,7 +13,7 @@ There a three modes supported:
 |------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **integrated** (recommended) | Run in conjunction with sonar-maven-plugin (supports branches and pull requests)<br>The required information for fetching the data will be read from a sonar-maven-plugin generated file in `target` |
 | **simple**                   | Run stand-alone for a simple SonarQube project (no branches)                                                                                                                                         |
-| **advanced**                 | Run stand-alone for a SonarQube project with branch name our pull request                                                                                                                            |
+| **advanced**                 | Run stand-alone for a SonarQube project with branch name or pull request                                                                                                                             |
 
 ## Prerequisites
 
