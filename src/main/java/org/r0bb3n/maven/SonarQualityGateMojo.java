@@ -59,7 +59,7 @@ import org.r0bb3n.maven.model.TaskContainer;
 /**
  * Check project status in SonarQube and fail build, if quality gate is not passed
  */
-@Mojo(name = "check")
+@Mojo(name = "check", aggregator = true)
 public class SonarQualityGateMojo extends AbstractMojo {
 
   private static final String PROP_SONAR_LOGIN = "sonar.login";
