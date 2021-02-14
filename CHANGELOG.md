@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- support multi module projects
+
 [unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.0.1...HEAD
 
 ## [1.0.2]
