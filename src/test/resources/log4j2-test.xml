@@ -7,7 +7,6 @@
   </Appenders>
   <Loggers>
     <Logger name="org.r0bb3n" level="INFO"/>
-    <Logger name="org.r0bb3n.maven.SonarConnectorTest" level="TRACE"/>
     <Root level="INFO">
       <AppenderRef ref="console"/>
     </Root>

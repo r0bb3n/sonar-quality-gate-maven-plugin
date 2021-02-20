@@ -1,0 +1,24 @@
+{
+  "id": "6d4ab366-0df7-4517-96aa-353cea2941a8",
+  "name": "api_qualitygates_project_status",
+  "request": {
+    "url": "/api/qualitygates/project_status?analysisId=AXe74Z38wlKnb4b_2mMT",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"projectStatus\":{\"status\":\"OK\",\"conditions\":[{\"status\":\"OK\",\"metricKey\":\"blocker_violations\",\"comparator\":\"GT\",\"errorThreshold\":\"2\",\"actualValue\":\"2\"}],\"periods\":[{\"index\":1,\"mode\":\"previous_version\",\"date\":\"2021-02-14T19:35:18+0100\"}],\"ignoredConditions\":false}}",
+    "headers": {
+      "Date": "Fri, 19 Feb 2021 20:01:07 GMT",
+      "Content-Type": "application/json",
+      "X-Frame-Options": "SAMEORIGIN",
+      "X-XSS-Protection": "1; mode=block",
+      "X-Content-Type-Options": "nosniff",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Sonar-Version": "8.5.0.37579"
+    }
+  },
+  "uuid": "6d4ab366-0df7-4517-96aa-353cea2941a8",
+  "persistent": true,
+  "insertionIndex": 93
+}
