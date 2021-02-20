@@ -16,8 +16,6 @@
 
 package org.r0bb3n.maven;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -125,7 +123,7 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * @throws MojoFailureException quality gate evaluates as not passed
    */
   public void execute() throws MojoExecutionException, MojoFailureException {
-    if (isBlank(sonarLogin) && !isBlank(sonarPassword)) {
+    if (Util.isBlank(sonarLogin) && !Util.isBlank(sonarPassword)) {
       throw new MojoExecutionException(String
           .format("you cannot specify '%s' without '%s'", PROP_SONAR_PASSWORD, PROP_SONAR_LOGIN));
     }
@@ -133,7 +131,7 @@ public class SonarQualityGateMojo extends AbstractMojo {
         new SonarConnector(getLog(), sonarHostUrl, sonarLogin, sonarPassword, sonarProjectKey);
 
     String analysisId;
-    if (isBlank(branch) && isBlank(pullRequest)) {
+    if (Util.isBlank(branch) && Util.isBlank(pullRequest)) {
       Optional<String> ceTaskIdOpt = findCeTaskId();
       if (ceTaskIdOpt.isPresent()) {
         // previous sonar run found, switching to 'integrated'
@@ -257,7 +255,7 @@ public class SonarQualityGateMojo extends AbstractMojo {
       throw new MojoExecutionException(
           String.format("Error parsing properties in: %s", reportTaskPath), e);
     }
-    if (isBlank(ceTaskId)) {
+    if (Util.isBlank(ceTaskId)) {
       throw new MojoExecutionException(String
           .format("Property '%s' not found in '%s'", REPORT_TASK_KEY_CE_TASK_ID, reportTaskPath));
     } else {

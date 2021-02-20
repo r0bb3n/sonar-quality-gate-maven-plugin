@@ -16,8 +16,6 @@
 
 package org.r0bb3n.maven;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -110,10 +108,10 @@ public class SonarConnector {
       // 'simple' and 'advanced' mode
       params = new LinkedHashMap<>();
       params.put("projectKey", sonarProjectKey);
-      if (!isBlank(branch)) {
+      if (!Util.isBlank(branch)) {
         params.put("branch", branch);
       }
-      if (!isBlank(pullRequest)) {
+      if (!Util.isBlank(pullRequest)) {
         params.put("pullRequest", pullRequest);
       }
     }
@@ -188,8 +186,8 @@ public class SonarConnector {
    */
   private HttpRequest.Builder createRequestBuilder() {
     HttpRequest.Builder ret = HttpRequest.newBuilder();
-    if (!isBlank(sonarLogin)) {
-      if (isBlank(sonarPassword)) {
+    if (!Util.isBlank(sonarLogin)) {
+      if (Util.isBlank(sonarPassword)) {
         ret.header(HEADER_NAME_AUTHORIZATION, basicAuth(sonarLogin, ""));
       } else {
         ret.header(HEADER_NAME_AUTHORIZATION, basicAuth(sonarLogin, sonarPassword));
