@@ -147,7 +147,13 @@ public class SonarQualityGateMojo extends AbstractMojo {
 
     ProjectStatus projectStatus;
     try {
-      projectStatus = sonarConnector.retrieveProjectStatus(analysisId, branch, pullRequest);
+      if (analysisId != null) {
+        // 'integrated' mode
+        projectStatus = sonarConnector.retrieveProjectStatusByAnalysisId(analysisId);
+      } else {
+        // 'simple' / 'advanced' mode
+        projectStatus = sonarConnector.retrieveProjectStatus(branch, pullRequest);
+      }
     } catch (IOException e) {
       throw new MojoExecutionException("error fetching project status", e);
     } catch (InterruptedException e) {
@@ -180,7 +186,7 @@ public class SonarQualityGateMojo extends AbstractMojo {
    *
    * @param sonarConnector connector to sonar server
    * @param ceTaskId ce task id to gather details (including analysis id)
-   * @return analysis id
+   * @return analysis id, not null (unavailable id we cause an exception)
    * @throws MojoExecutionException task got unsuitable status (({@link Task.Status#FAILED}/{@link
    * Task.Status#CANCELED}) or task is still ongoing but attempt limit is reached or IO errors.
    */

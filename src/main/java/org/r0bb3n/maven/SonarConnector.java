@@ -33,6 +33,7 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.maven.plugin.logging.Log;
 import org.r0bb3n.maven.model.Container;
@@ -55,6 +56,20 @@ public class SonarConnector {
   private final String sonarPassword;
   private final String sonarProjectKey;
 
+  /**
+   * Query parameters for project status api endpoint
+   */
+  @RequiredArgsConstructor
+  @Getter
+  private enum ProjectStatusParam {
+    ANALYSIS_ID("analysisId"),
+    PROJECT_KEY("projectKey"),
+    BRANCH("branch"),
+    PULL_REQUEST("pullRequest");
+
+    private final String paramName;
+  }
+
 
   /**
    * Retrieve task data from sonar server using the ceTaskId
@@ -71,55 +86,50 @@ public class SonarConnector {
   }
 
   /**
-   * Retrieve project status from sonar server by using either analysisId or branch or pull request
+   * Retrieve project status from sonar server by using analysisId
    *
    * @param analysisId analysis id
-   * @param branch branch name
-   * @param pullRequest pull request
    * @return project status data
    * @throws IOException error while using URI, fetching response or mapping to Object
    * @throws InterruptedException interrupted while request ongoing
    */
-  public ProjectStatus retrieveProjectStatus(String analysisId, String branch, String pullRequest)
+  public ProjectStatus retrieveProjectStatusByAnalysisId(String analysisId)
       throws IOException, InterruptedException {
-    URI projectStatusUri = createProjectStatusRequestUri(analysisId, branch, pullRequest);
+    URI projectStatusUri = createUri(SONAR_WEB_API_PATH_PROJECT_STATUS,
+        Collections.singletonMap(ProjectStatusParam.ANALYSIS_ID.getParamName(), analysisId));
     String projStatJson = retrieveResponse(projectStatusUri);
 
     return parseContainer(ProjectStatusContainer.class, projStatJson);
   }
 
   /**
-   * Create URI with right base url, web API path and proper query parameters including either
-   * analysis id ('integrated' mode), project key ('simple' mode) or project key with either branch
-   * or pull request name  ('advanced' mode)
+   * Retrieve project status from sonar server by using the project key and optional either
+   * branch or pull request
    *
-   * @param analysisId analysisId or {@code null}
-   * @param branch branch name
-   * @param pullRequest pull request name/identifier
-   * @throws IOException URI could not be created
+   * @param branch branch name or null
+   * @param pullRequest pull request or null
+   * @return project status data
+   * @throws IOException error while using URI, fetching response or mapping to Object
+   * @throws InterruptedException interrupted while request ongoing
    */
-  private URI createProjectStatusRequestUri(String analysisId, String branch, String pullRequest)
-      throws IOException {
-    Map<String, String> params;
-    if (analysisId != null) {
-      // 'integrated' mode
-      params = Collections.singletonMap("analysisId", analysisId);
-    } else {
-      // 'simple' and 'advanced' mode
-      params = new LinkedHashMap<>();
-      params.put("projectKey", sonarProjectKey);
-      if (!Util.isBlank(branch)) {
-        params.put("branch", branch);
-      }
-      if (!Util.isBlank(pullRequest)) {
-        params.put("pullRequest", pullRequest);
-      }
+  public ProjectStatus retrieveProjectStatus(String branch, String pullRequest)
+      throws IOException, InterruptedException {
+    Map<String, String> params = new LinkedHashMap<>();
+    params.put(ProjectStatusParam.PROJECT_KEY.getParamName(), sonarProjectKey);
+    if (!Util.isBlank(branch)) {
+      params.put(ProjectStatusParam.BRANCH.getParamName(), branch);
     }
-    return createUri(SONAR_WEB_API_PATH_PROJECT_STATUS, params);
+    if (!Util.isBlank(pullRequest)) {
+      params.put(ProjectStatusParam.PULL_REQUEST.getParamName(), pullRequest);
+    }
+    URI projectStatusUri = createUri(SONAR_WEB_API_PATH_PROJECT_STATUS, params);
+    String projStatJson = retrieveResponse(projectStatusUri);
+
+    return parseContainer(ProjectStatusContainer.class, projStatJson);
   }
 
   /**
-   * build our with sonar base url, api path to resource and related query params
+   * build URI with sonar base url, api path to resource and related query params
    *
    * @param apiPath relative path to resource
    * @param queryParams map with query params, can be empty
