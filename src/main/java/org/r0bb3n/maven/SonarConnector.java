@@ -42,7 +42,6 @@ import org.r0bb3n.maven.model.ProjectStatusContainer;
 import org.r0bb3n.maven.model.Task;
 import org.r0bb3n.maven.model.TaskContainer;
 
-@RequiredArgsConstructor
 public class SonarConnector {
 
   private static final String SONAR_WEB_API_PATH_PROJECT_STATUS = "api/qualitygates/project_status";
@@ -52,9 +51,10 @@ public class SonarConnector {
 
   private final Log log;
   private final URL sonarHostUrl;
-  private final String sonarLogin;
-  private final String sonarPassword;
   private final String sonarProjectKey;
+
+  private final HttpClient httpClient = HttpClient.newHttpClient();
+  private final HttpRequest.Builder requestBuilderTemplate;
 
   /**
    * Query parameters for project status api endpoint
@@ -70,6 +70,21 @@ public class SonarConnector {
     private final String paramName;
   }
 
+  /**
+   * Create sonar connector
+   * @param log Logger to use
+   * @param sonarHostUrl host url of sonar
+   * @param sonarLogin optional sonar login name or token
+   * @param sonarPassword optional password for sonar login name
+   * @param sonarProjectKey project key used inside sonar
+   */
+  public SonarConnector(Log log, URL sonarHostUrl, String sonarLogin, String sonarPassword,
+      String sonarProjectKey) {
+    this.log = log;
+    this.sonarHostUrl = sonarHostUrl;
+    this.sonarProjectKey = sonarProjectKey;
+    this.requestBuilderTemplate = createRequestBuilder(sonarLogin, sonarPassword);
+  }
 
   /**
    * Retrieve task data from sonar server using the ceTaskId
@@ -166,13 +181,10 @@ public class SonarConnector {
   private String retrieveResponse(URI resourceUri) throws IOException, InterruptedException {
     log.info("Sonar Web API call: " + resourceUri);
 
-    HttpClient client = HttpClient.newHttpClient();
-    HttpRequest request =
-        createRequestBuilder().GET().uri(resourceUri).timeout(Duration.ofMinutes(1))
-            .header(HEADER_NAME_CONTENT_TYPE, "application/json").build();
+    HttpRequest request = requestBuilderTemplate.copy().GET().uri(resourceUri).build();
     HttpResponse<String> response;
     try {
-      response = client.send(request, HttpResponse.BodyHandlers.ofString());
+      response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     } catch (IOException e) {
       throw new IOException(String.format("Error reading from Sonar: %s", resourceUri), e);
     }
@@ -193,8 +205,10 @@ public class SonarConnector {
 
   /**
    * Create and configure (add authorization, if provided) request builder
+   * @param sonarLogin login name or token
+   * @param sonarPassword password for login name
    */
-  private HttpRequest.Builder createRequestBuilder() {
+  private HttpRequest.Builder createRequestBuilder(String sonarLogin, String sonarPassword) {
     HttpRequest.Builder ret = HttpRequest.newBuilder();
     if (!Util.isBlank(sonarLogin)) {
       if (Util.isBlank(sonarPassword)) {
@@ -203,6 +217,7 @@ public class SonarConnector {
         ret.header(HEADER_NAME_AUTHORIZATION, basicAuth(sonarLogin, sonarPassword));
       }
     }
+    ret.timeout(Duration.ofMinutes(1)).header(HEADER_NAME_CONTENT_TYPE, "application/json");
     return ret;
   }
 
