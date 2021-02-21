@@ -1,0 +1,27 @@
+{
+  "id": "82f3b8e9-25ec-40fa-9740-fc1ff7352e40",
+  "name": "api_ce_task",
+  "request": {
+    "url": "/api/ce/task?id=AXe74ZzR1IiFGsn-Op8X",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"task\":{\"id\":\"AXe74ZzR1IiFGsn-Op8X\",\"type\":\"REPORT\",\"componentId\":\"AXehzcU0_9oImxZu9ioO\",\"componentKey\":\"io.github.r0bb3n:sonar-test-project-multi-module-parent\",\"componentName\":\"sonar-test-project-multi-module-parent\",\"componentQualifier\":\"TRK\",\"status\":\"IN_PROGRESS\",\"submittedAt\":\"2021-02-19T21:01:01+0100\",\"submitterLogin\":\"r0bb3n@github\",\"startedAt\":\"2021-02-19T21:01:01+0100\",\"executionTimeMs\":672,\"logs\":false,\"organization\":\"r0bb3n\",\"warnings\":[]}}",
+    "headers": {
+      "Date": "Fri, 19 Feb 2021 20:01:02 GMT",
+      "Content-Type": "application/json",
+      "X-Frame-Options": "SAMEORIGIN",
+      "X-XSS-Protection": "1; mode=block",
+      "X-Content-Type-Options": "nosniff",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Sonar-Version": "8.5.0.37579"
+    }
+  },
+  "uuid": "82f3b8e9-25ec-40fa-9740-fc1ff7352e40",
+  "persistent": true,
+  "scenarioName": "scenario-1-api-ce-task",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-api-ce-task-2",
+  "insertionIndex": 91
+}
