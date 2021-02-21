@@ -29,6 +29,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.r0bb3n.maven.model.ProjectStatus;
 import org.r0bb3n.maven.model.Task;
+import org.r0bb3n.maven.util.LogFacade;
 
 /**
  * Test cases for sonar server communication

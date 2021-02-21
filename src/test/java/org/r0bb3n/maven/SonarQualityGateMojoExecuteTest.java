@@ -22,12 +22,18 @@ import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.r0bb3n.maven.util.ExceptionMatchers;
+import org.r0bb3n.maven.util.LogFacade;
 
 /**
  * test cases for {@link SonarQualityGateMojo}
@@ -62,14 +68,26 @@ public class SonarQualityGateMojoExecuteTest {
   }
 
   @Test
-  public void testMojoExecuteSuccess() throws Exception {
-    Mockito.doAnswer(invocation -> Optional.of("AXe74ZzR1IiFGsn-Op8X")).when(underTestSpy)
-        .findCeTaskId(Mockito.any());
+  public void mojoExecuteWithTwoTaskCallsAndOneAnalysisCallOk() throws Exception {
+    Mockito.doAnswer(
+        invocation -> Optional.of("mojoExecuteWithTwoTaskCallsAndOneAnalysisCallOk_taskId"))
+        .when(underTestSpy).findCeTaskId(Mockito.any());
 
     underTestSpy.execute();
     // assert is difficult - let's check, if a final positive log gets written
     Mockito.verify(logSpy, Mockito.times(1)).info("project status: OK");
+  }
 
+  @Test
+  public void mojoExecuteWithOneTaskCallAndOneAnalysisCallError() throws Exception {
+    Mockito.doAnswer(
+        invocation -> Optional.of("mojoExecuteWithOneTaskCallAndOneAnalysisCallError_taskId"))
+        .when(underTestSpy).findCeTaskId(Mockito.any());
+
+    MojoFailureException exc =
+        Assert.assertThrows(MojoFailureException.class, underTestSpy::execute);
+    MatcherAssert.assertThat(exc,
+        ExceptionMatchers.hasMessageThat(Matchers.startsWith("Quality Gate not passed")));
   }
 
   private void setField(SonarQualityGateMojo mojo, String fieldName, Object value)

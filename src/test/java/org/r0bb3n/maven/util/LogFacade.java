@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.r0bb3n.maven;
+package org.r0bb3n.maven.util;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;

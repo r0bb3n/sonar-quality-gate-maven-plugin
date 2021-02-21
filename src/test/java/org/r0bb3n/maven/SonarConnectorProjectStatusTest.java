@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.r0bb3n.maven.model.ProjectStatus;
+import org.r0bb3n.maven.util.LogFacade;
 
 /**
  * Test cases for sonar server communication

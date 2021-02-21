@@ -2,12 +2,12 @@
   "id": "82f3b8e9-25ec-40fa-9740-fc1ff7352e40",
   "name": "api_ce_task",
   "request": {
-    "url": "/api/ce/task?id=AXe74ZzR1IiFGsn-Op8X",
+    "url": "/api/ce/task?id=mojoExecuteWithTwoTaskCallsAndOneAnalysisCallOk_taskId",
     "method": "GET"
   },
   "response": {
     "status": 200,
-    "body": "{\"task\":{\"id\":\"AXe74ZzR1IiFGsn-Op8X\",\"type\":\"REPORT\",\"componentId\":\"AXehzcU0_9oImxZu9ioO\",\"componentKey\":\"io.github.r0bb3n:sonar-test-project-multi-module-parent\",\"componentName\":\"sonar-test-project-multi-module-parent\",\"componentQualifier\":\"TRK\",\"status\":\"IN_PROGRESS\",\"submittedAt\":\"2021-02-19T21:01:01+0100\",\"submitterLogin\":\"r0bb3n@github\",\"startedAt\":\"2021-02-19T21:01:01+0100\",\"executionTimeMs\":672,\"logs\":false,\"organization\":\"r0bb3n\",\"warnings\":[]}}",
+    "body": "{\"task\":{\"id\":\"mojoExecuteWithTwoTaskCallsAndOneAnalysisCallOk_taskId\",\"type\":\"REPORT\",\"componentId\":\"AXehzcU0_9oImxZu9ioO\",\"componentKey\":\"io.github.r0bb3n:sonar-test-project-multi-module-parent\",\"componentName\":\"sonar-test-project-multi-module-parent\",\"componentQualifier\":\"TRK\",\"status\":\"IN_PROGRESS\",\"submittedAt\":\"2021-02-19T21:01:01+0100\",\"submitterLogin\":\"r0bb3n@github\",\"startedAt\":\"2021-02-19T21:01:01+0100\",\"executionTimeMs\":672,\"logs\":false,\"organization\":\"r0bb3n\",\"warnings\":[]}}",
     "headers": {
       "Date": "Fri, 19 Feb 2021 20:01:02 GMT",
       "Content-Type": "application/json",

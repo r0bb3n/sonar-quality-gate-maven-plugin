@@ -1,0 +1,24 @@
+{
+  "id": "8318a7d0-5273-48a9-8b5c-d920387efb18",
+  "name": "api_qualitygates_project_status",
+  "request": {
+    "url": "/api/qualitygates/project_status?analysisId=mojoExecuteWithOneTaskCallAndOneAnalysisCallError_analysisId",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"projectStatus\":{\"status\":\"ERROR\",\"conditions\":[{\"status\":\"OK\",\"metricKey\":\"new_reliability_rating\",\"comparator\":\"GT\",\"periodIndex\":1,\"errorThreshold\":\"1\",\"actualValue\":\"1\"},{\"status\":\"OK\",\"metricKey\":\"new_security_rating\",\"comparator\":\"GT\",\"periodIndex\":1,\"errorThreshold\":\"1\",\"actualValue\":\"1\"},{\"status\":\"OK\",\"metricKey\":\"new_maintainability_rating\",\"comparator\":\"GT\",\"periodIndex\":1,\"errorThreshold\":\"1\",\"actualValue\":\"1\"},{\"status\":\"ERROR\",\"metricKey\":\"new_coverage\",\"comparator\":\"LT\",\"periodIndex\":1,\"errorThreshold\":\"80\",\"actualValue\":\"0.0\"},{\"status\":\"OK\",\"metricKey\":\"new_duplicated_lines_density\",\"comparator\":\"GT\",\"periodIndex\":1,\"errorThreshold\":\"3\",\"actualValue\":\"0.0\"},{\"status\":\"OK\",\"metricKey\":\"new_security_hotspots_reviewed\",\"comparator\":\"LT\",\"periodIndex\":1,\"errorThreshold\":\"100\",\"actualValue\":\"100.0\"}],\"periods\":[{\"index\":1,\"mode\":\"previous_version\",\"date\":\"2021-02-14T19:28:54+0100\"}],\"ignoredConditions\":false}}",
+    "headers": {
+      "Date": "Fri, 19 Feb 2021 19:43:44 GMT",
+      "Content-Type": "application/json",
+      "X-Frame-Options": "SAMEORIGIN",
+      "X-XSS-Protection": "1; mode=block",
+      "X-Content-Type-Options": "nosniff",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Sonar-Version": "8.5.0.37579"
+    }
+  },
+  "uuid": "8318a7d0-5273-48a9-8b5c-d920387efb18",
+  "persistent": true,
+  "insertionIndex": 50
+}
