@@ -20,9 +20,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.google.common.base.Charsets;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -114,7 +114,7 @@ public class SonarQualityGateMojoConfigTest {
     if (taskId != null) {
       sb.append("ceTaskId=").append(taskId).append("\n");
     }
-    Files.writeString(taskFile, sb, Charsets.UTF_8);
+    Files.writeString(taskFile, sb, StandardCharsets.UTF_8);
     return buildDir;
   }
 }
