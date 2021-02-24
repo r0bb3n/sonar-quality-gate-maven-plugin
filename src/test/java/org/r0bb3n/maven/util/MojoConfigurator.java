@@ -85,7 +85,21 @@ public class MojoConfigurator {
    * @throws Exception reflection errors
    */
   private void setField(String fieldName, Object value) throws Exception {
-    Field field = mojo.getClass().getDeclaredField(fieldName);
+    Class<?> clazz = mojo.getClass();
+    Field field = null;
+    while (field == null && !Object.class.equals(clazz)) {
+      try {
+        field = clazz.getDeclaredField(fieldName);
+      } catch (NoSuchFieldException e) {
+        // continue searching in super class
+        clazz = clazz.getSuperclass();
+      }
+    }
+    if (field == null) {
+      throw new NoSuchFieldException(String
+          .format("Field '%s' could not be found in class '%s' and its super classes", fieldName,
+              mojo.getClass()));
+    }
     field.setAccessible(true);
     field.set(mojo, value);
     field.setAccessible(false);
