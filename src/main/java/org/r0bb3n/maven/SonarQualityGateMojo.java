@@ -190,7 +190,7 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * @throws MojoExecutionException task got unsuitable status (({@link Task.Status#FAILED}/{@link
    * Task.Status#CANCELED}) or task is still ongoing but attempt limit is reached or IO errors.
    */
-  private String retrieveAnalysisId(SonarConnector sonarConnector, String ceTaskId)
+  protected String retrieveAnalysisId(SonarConnector sonarConnector, String ceTaskId)
       throws MojoExecutionException {
     int attemptsLeft = checkTaskAttempts;
     Task.Status status = Task.Status.IN_PROGRESS;

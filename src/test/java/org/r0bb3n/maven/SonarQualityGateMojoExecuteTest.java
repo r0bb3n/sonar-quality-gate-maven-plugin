@@ -18,10 +18,10 @@ package org.r0bb3n.maven;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.hamcrest.MatcherAssert;
@@ -34,6 +34,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.r0bb3n.maven.util.ExceptionMatchers;
 import org.r0bb3n.maven.util.LogFacade;
+import org.r0bb3n.maven.util.MojoConfigurator;
 
 /**
  * test cases for {@link SonarQualityGateMojo}
@@ -58,11 +59,11 @@ public class SonarQualityGateMojoExecuteTest {
    */
   @Before
   public void setUp() throws Exception {
-    SonarQualityGateMojo sonarQualityGateMojo = new SonarQualityGateMojo();
-    setField(sonarQualityGateMojo, "sonarHostUrl", new URL(wireMockClassRule.baseUrl()));
-    setField(sonarQualityGateMojo, "checkTaskAttempts", 10);
-    setField(sonarQualityGateMojo, "checkTaskIntervalS", 1);
-    underTestSpy = Mockito.spy(sonarQualityGateMojo);
+    SonarQualityGateMojo underTest = new SonarQualityGateMojo();
+    MojoConfigurator.configure(underTest).setSonarHostUrl(new URL(wireMockClassRule.baseUrl()))
+        .setSonarProjectKey("io.github.r0bb3n:sonar-quality-gate-maven-plugin")
+        .setCheckTaskAttempts(10).setCheckTaskIntervalS(1);
+    underTestSpy = Mockito.spy(underTest);
     logSpy = Mockito.spy(new LogFacade(log));
     Mockito.when(underTestSpy.getLog()).thenReturn(logSpy);
   }
@@ -74,8 +75,23 @@ public class SonarQualityGateMojoExecuteTest {
         .when(underTestSpy).findCeTaskId(Mockito.any());
 
     underTestSpy.execute();
+    // check for done retry
+    Mockito.verify(logSpy).info(Mockito.startsWith("Analysis in progress, next retry in"));
     // assert is difficult - let's check, if a final positive log gets written
-    Mockito.verify(logSpy, Mockito.times(1)).info("project status: OK");
+    Mockito.verify(logSpy).info("project status: OK");
+  }
+
+  @Test
+  public void mojoExecuteWithAbortAfterOneTaskCall() throws Exception {
+    MojoConfigurator.configure(underTestSpy).setCheckTaskAttempts(1);
+    Mockito.doAnswer(
+        invocation -> Optional.of("mojoExecuteWithTwoTaskCallsAndOneAnalysisCallOk_taskId"))
+        .when(underTestSpy).findCeTaskId(Mockito.any());
+
+    MojoExecutionException exc =
+        Assert.assertThrows(MojoExecutionException.class, underTestSpy::execute);
+    MatcherAssert.assertThat(exc,
+        ExceptionMatchers.hasMessageThat(Matchers.startsWith("Could not fetch analysis id")));
   }
 
   @Test
@@ -90,12 +106,41 @@ public class SonarQualityGateMojoExecuteTest {
         ExceptionMatchers.hasMessageThat(Matchers.startsWith("Quality Gate not passed")));
   }
 
-  private void setField(SonarQualityGateMojo mojo, String fieldName, Object value)
-      throws Exception {
-    // using @Parameter annotation not possible, since not available during runtime
-    Field field = SonarQualityGateMojo.class.getDeclaredField(fieldName);
-    field.setAccessible(true);
-    field.set(mojo, value);
-    field.setAccessible(false);
+  @Test
+  public void mojoExecuteWithProjectKeyOk() throws Exception {
+    Mockito.doAnswer(invocation -> Optional.empty()).when(underTestSpy).findCeTaskId(Mockito.any());
+
+    underTestSpy.execute();
+
+    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any(), Mockito.any());
+    // assert is difficult - let's check, if a final positive log gets written
+    Mockito.verify(logSpy).info("project status: OK");
   }
+
+  @Test
+  public void mojoExecuteWithProjectKeyAndBranchNone() throws Exception {
+    MojoConfigurator.configure(underTestSpy).setBranch("feature/GH-31_increase-test-coverage");
+    Mockito.doAnswer(invocation -> Optional.empty()).when(underTestSpy).findCeTaskId(Mockito.any());
+
+    MojoFailureException exc =
+        Assert.assertThrows(MojoFailureException.class, underTestSpy::execute);
+    MatcherAssert.assertThat(exc, ExceptionMatchers
+        .hasMessageThat(Matchers.startsWith("Quality Gate not passed (status: NONE)!")));
+
+    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any(), Mockito.any());
+  }
+
+  @Test
+  public void mojoExecuteWithProjectKeyAndPullRequestWarn() throws Exception {
+    MojoConfigurator.configure(underTestSpy).setPullRequest("59");
+    Mockito.doAnswer(invocation -> Optional.empty()).when(underTestSpy).findCeTaskId(Mockito.any());
+
+    MojoFailureException exc =
+        Assert.assertThrows(MojoFailureException.class, underTestSpy::execute);
+    MatcherAssert.assertThat(exc, ExceptionMatchers
+        .hasMessageThat(Matchers.startsWith("Quality Gate not passed (status: WARN)!")));
+
+    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any(), Mockito.any());
+  }
+
 }

@@ -1,0 +1,24 @@
+{
+  "id": "4df83e04-1585-44b4-9749-6952af032564",
+  "name": "api_qualitygates_project_status",
+  "request": {
+    "url": "/api/qualitygates/project_status?projectKey=io.github.r0bb3n%3Asonar-quality-gate-maven-plugin&branch=feature%2FGH-31_increase-test-coverage",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"projectStatus\":{\"status\":\"NONE\",\"conditions\":[],\"periods\":[],\"ignoredConditions\":false}}",
+    "headers": {
+      "Date": "Wed, 24 Feb 2021 19:27:04 GMT",
+      "Content-Type": "application/json",
+      "X-Frame-Options": "SAMEORIGIN",
+      "X-XSS-Protection": "1; mode=block",
+      "X-Content-Type-Options": "nosniff",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Sonar-Version": "8.5.0.37579"
+    }
+  },
+  "uuid": "4df83e04-1585-44b4-9749-6952af032564",
+  "persistent": true,
+  "insertionIndex": 4
+}
