@@ -47,6 +47,16 @@ public class MojoConfigurator {
     return this;
   }
 
+  public MojoConfigurator setSonarLogin(String sonarLogin) throws Exception {
+    setField("sonarLogin", sonarLogin);
+    return this;
+  }
+
+  public MojoConfigurator setSonarPassword(String sonarPassword) throws Exception {
+    setField("sonarPassword", sonarPassword);
+    return this;
+  }
+
   public MojoConfigurator setBranch(String branch) throws Exception {
     setField("branch", branch);
     return this;
