@@ -132,7 +132,7 @@ public class SonarQualityGateMojo extends AbstractMojo {
 
     String analysisId;
     if (Util.isBlank(branch) && Util.isBlank(pullRequest)) {
-      Optional<String> ceTaskIdOpt = findCeTaskId();
+      Optional<String> ceTaskIdOpt = findCeTaskId(projectBuildDirectory);
       if (ceTaskIdOpt.isPresent()) {
         // previous sonar run found, switching to 'integrated'
         analysisId = retrieveAnalysisId(sonarConnector, ceTaskIdOpt.get());
@@ -190,7 +190,7 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * @throws MojoExecutionException task got unsuitable status (({@link Task.Status#FAILED}/{@link
    * Task.Status#CANCELED}) or task is still ongoing but attempt limit is reached or IO errors.
    */
-  private String retrieveAnalysisId(SonarConnector sonarConnector, String ceTaskId)
+  protected String retrieveAnalysisId(SonarConnector sonarConnector, String ceTaskId)
       throws MojoExecutionException {
     int attemptsLeft = checkTaskAttempts;
     Task.Status status = Task.Status.IN_PROGRESS;
@@ -242,11 +242,12 @@ public class SonarQualityGateMojo extends AbstractMojo {
   /**
    * Determine compute engine task id ("ceTaskId") of previous run of sonar-maven-plugin
    *
+   * @param buildDir build directory, where sonar folder and report task file is located
    * @return id to request task details
    * @throws MojoExecutionException io problems when reading sonar-maven-plugin file
    */
-  private Optional<String> findCeTaskId() throws MojoExecutionException {
-    Path reportTaskPath = Path.of(projectBuildDirectory, "sonar", "report-task.txt");
+  protected Optional<String> findCeTaskId(String buildDir) throws MojoExecutionException {
+    Path reportTaskPath = Path.of(buildDir, "sonar", "report-task.txt");
     if (!Files.exists(reportTaskPath)) {
       getLog()
           .info("no report file from previously sonar-maven-plugin run found: " + reportTaskPath);

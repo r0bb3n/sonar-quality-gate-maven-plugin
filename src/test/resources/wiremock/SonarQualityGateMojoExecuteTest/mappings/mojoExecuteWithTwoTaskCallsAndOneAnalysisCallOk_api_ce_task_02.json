@@ -1,0 +1,26 @@
+{
+  "id": "26445dd0-d126-49d3-8804-d09832d51dc7",
+  "name": "api_ce_task",
+  "request": {
+    "url": "/api/ce/task?id=mojoExecuteWithTwoTaskCallsAndOneAnalysisCallOk_taskId",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"task\":{\"id\":\"mojoExecuteWithTwoTaskCallsAndOneAnalysisCallOk_taskId\",\"type\":\"REPORT\",\"componentId\":\"AXehzcU0_9oImxZu9ioO\",\"componentKey\":\"io.github.r0bb3n:sonar-test-project-multi-module-parent\",\"componentName\":\"sonar-test-project-multi-module-parent\",\"componentQualifier\":\"TRK\",\"analysisId\":\"mojoExecuteWithTwoTaskCallsAndOneAnalysisCallOk_analysisId\",\"status\":\"SUCCESS\",\"submittedAt\":\"2021-02-19T21:01:01+0100\",\"submitterLogin\":\"r0bb3n@github\",\"startedAt\":\"2021-02-19T21:01:01+0100\",\"executedAt\":\"2021-02-19T21:01:02+0100\",\"executionTimeMs\":1643,\"logs\":false,\"hasScannerContext\":true,\"organization\":\"r0bb3n\",\"warningCount\":0,\"warnings\":[]}}",
+    "headers": {
+      "Date": "Fri, 19 Feb 2021 20:01:07 GMT",
+      "Content-Type": "application/json",
+      "X-Frame-Options": "SAMEORIGIN",
+      "X-XSS-Protection": "1; mode=block",
+      "X-Content-Type-Options": "nosniff",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Sonar-Version": "8.5.0.37579"
+    }
+  },
+  "uuid": "26445dd0-d126-49d3-8804-d09832d51dc7",
+  "persistent": true,
+  "scenarioName": "scenario-1-api-ce-task",
+  "requiredScenarioState": "scenario-1-api-ce-task-2",
+  "insertionIndex": 92
+}

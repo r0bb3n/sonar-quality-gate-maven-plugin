@@ -1,0 +1,24 @@
+{
+  "id": "1e36daaf-37a7-4664-94c5-35a91197ac51",
+  "name": "api_qualitygates_project_status",
+  "request": {
+    "url": "/api/qualitygates/project_status?projectKey=io.github.r0bb3n%3Asonar-quality-gate-maven-plugin&pullRequest=59",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"projectStatus\":{\"status\":\"WARN\",\"conditions\":[{\"status\":\"OK\",\"metricKey\":\"new_reliability_rating\",\"comparator\":\"GT\",\"periodIndex\":1,\"errorThreshold\":\"1\",\"actualValue\":\"1\"},{\"status\":\"OK\",\"metricKey\":\"new_security_rating\",\"comparator\":\"GT\",\"periodIndex\":1,\"errorThreshold\":\"1\",\"actualValue\":\"1\"},{\"status\":\"OK\",\"metricKey\":\"new_maintainability_rating\",\"comparator\":\"GT\",\"periodIndex\":1,\"errorThreshold\":\"1\",\"actualValue\":\"1\"},{\"status\":\"OK\",\"metricKey\":\"new_duplicated_lines_density\",\"comparator\":\"GT\",\"periodIndex\":1,\"errorThreshold\":\"3\",\"actualValue\":\"0.0\"},{\"status\":\"OK\",\"metricKey\":\"new_violations\",\"comparator\":\"GT\",\"periodIndex\":1,\"errorThreshold\":\"0\",\"actualValue\":\"0\"}],\"periods\":[],\"ignoredConditions\":false}}",
+    "headers": {
+      "Date": "Wed, 24 Feb 2021 19:27:25 GMT",
+      "Content-Type": "application/json",
+      "X-Frame-Options": "SAMEORIGIN",
+      "X-XSS-Protection": "1; mode=block",
+      "X-Content-Type-Options": "nosniff",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Sonar-Version": "8.5.0.37579"
+    }
+  },
+  "uuid": "1e36daaf-37a7-4664-94c5-35a91197ac51",
+  "persistent": true,
+  "insertionIndex": 6
+}
