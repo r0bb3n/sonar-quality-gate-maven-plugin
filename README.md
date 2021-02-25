@@ -33,14 +33,14 @@ calling it only explicitly on CLI or in `<build><plugins>` to integrate it autom
 <plugin>
   <groupId>io.github.r0bb3n</groupId>
   <artifactId>sonar-quality-gate-maven-plugin</artifactId>
-  <version>1.0.2</version>
+  <version>1.1.0</version>
 </plugin>
 ```
 
 You can also use it without changing your `pom.xml` by calling it fully qualified on CLI:
 
 ```
-mvn io.github.r0bb3n:sonar-quality-gate-maven-plugin:1.0.2:check
+mvn io.github.r0bb3n:sonar-quality-gate-maven-plugin:1.1.0:check
 ```
 
 **Integrated mode**
@@ -155,6 +155,6 @@ mvn -B release:clean
 3. persist:
    `git add CHANGELOG.md README.md && git commit -m "prepare for release: update CHANGELOG.md/README.md" && git push`
 4. create release in git repo:
-   `mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.0.2 -Dtag=v1.0.2`
+   `mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.1.0 -Dtag=v1.1.0`
 5. create and publish binaries:
    `mvn -B release:perform -DreleaseProfiles=build-for-release`

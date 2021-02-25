@@ -7,11 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+--
+
+[unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.1.0...HEAD
+
+## [1.1.0]
+
 ### Added
 
-- support multi module projects
+- support multi module projects ([#55](https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/55))
+- test coverage increased a lot ([#31](https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/31))
 
-[unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.0.1...HEAD
+[1.1.0]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.0.2...v1.1.0
 
 ## [1.0.2]
 
