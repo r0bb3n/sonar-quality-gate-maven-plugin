@@ -133,7 +133,7 @@ This endpoint is used to retrieve the analysis id of a prior sonar-maven-plugin 
 **_prepare_** - manage `pom.xml` and create proper commits and tag and push to remote
 
 ```
-mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.0.2 -Dtag=v1.0.2
+mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=<release version> -Dtag=v<release version>
 ```
 
 **_perform_** - checkout version tag, create binaries and deploy via oss.sonatype.org to Maven Central
@@ -142,10 +142,19 @@ mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.0.2 -D
 mvn -B release:perform
 ```
 
-
 **_clean_** - remove backup/work file (useful if you ran prepare but not perform)
 
 ```
 mvn -B release:clean
 ```
 
+### How-To release
+
+1. Update `CHANGELOG.md`: add a section for the upcoming version and move all "unpublished" changes to it
+2. Update `README.md`: replace all occurrences of previous version number with upcoming version
+3. persist:
+   `git add CHANGELOG.md README.md && git commit -m "prepare for release: update CHANGELOG.md/README.md" && git push`
+4. create release in git repo:
+   `mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.0.2 -Dtag=v1.0.2`
+5. create and publish binaries:
+   `mvn -B release:perform -DreleaseProfiles=build-for-release`
