@@ -158,3 +158,22 @@ mvn -B release:clean
    `mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.1.0 -Dtag=v1.1.0`
 5. create and publish binaries:
    `mvn -B release:perform -DreleaseProfiles=build-for-release`
+6. Create new release on GitHub ([here](https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/releases/new))
+   - choose tag: v1.1.0
+   - set title: 1.1.0
+   - copy the `CHANGELOG.md` content of the released version
+   - upload the files `./target/checkout/target/*.(pom|jar|asc)`
+7. publish [staging repository of oss nexus repository](https://oss.sonatype.org/#stagingRepositories)
+   (login required) to maven
+   central ([overview doc](https://central.sonatype.org/pages/ossrh-guide.html#releasing-to-central)
+   / [detailed doc](https://central.sonatype.org/pages/releasing-the-deployment.html))
+   1. check content of the staging repo
+   2. select staging repo
+   3. "Close" repo
+   4. evaluation is now running, see repo tab "Activity"
+   5. "Refresh" repo view
+   6. "Release" repo
+   7. copying is ongoing, see repo tab "Activity"
+   8. "Refresh" repo view, staging repo will disappear after successful copy process
+   9. verify that files are now available on the public release repo:
+      [GAV search](https://oss.sonatype.org/#nexus-search;gav~io.github.r0bb3n~sonar-quality-gate-maven-plugin~1.*~~)
