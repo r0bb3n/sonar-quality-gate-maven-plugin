@@ -19,6 +19,7 @@ There a three modes supported:
 ## Prerequisites
 
 * Java 11
+  * see section [Why Java 11?](#why-java-11) for details
 * SonarQube (depends on mode)
   * integrated: 5.3+ 
   * simple: 5.4+
@@ -77,9 +78,18 @@ mvn sonar-quality-gate:check -Dsonar-quality-gate.branch=develop
 | `sonar-quality-gate.checkTask.interval.s` | How many seconds to wait between two requests when retrieving task details<br>(default: `5`)                                                                                                    | integrated       |
 
 [sonar-analysis-param]: https://docs.sonarqube.org/latest/analysis/analysis-parameters/
+
 [sonar-web-api-auth]: https://docs.sonarqube.org/latest/extend/web-api/
 
 ## Internals
+
+### Why Java 11?
+
+**TL;DR** usage of HttpClient (`java.net.http.HttpClient`)
+
+Thinking about also supporting Java 8 led to the conclusion, that this would require relying on at least one additional
+dependency (to maintain) for HTTP calls (e.g. Apache HttpClient), which is solved out-of-the-box in Java 11+ by simply
+using `java.net.http.HttpClient`. Therefore, I decided to not support Java 8.
 
 ### Calling SonarQube Web API
 
