@@ -63,6 +63,15 @@ jobs:
           mvn --file pom.xml --batch-mode \
             sonar:sonar sonar-quality-gate:check \
             -Dsonar.login=$SONARCLOUD_TOKEN
+      - name: Run multi-module test project analysis
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+        working-directory: ./src/test/projects/multi-module
+        run: |
+          mvn --file pom.xml --batch-mode \
+            sonar:sonar sonar-quality-gate:check \
+            -Dsonar.login=$SONARCLOUD_TOKEN
       - name: Sonar Analysis with Maven (sonarcloud.io) - Branch
         if: github.event_name == 'push'
         env:
