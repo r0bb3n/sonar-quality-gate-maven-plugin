@@ -27,6 +27,15 @@ jobs:
           java-version: 11
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.m2/repository
+            !~/.m2/repository/**/*-SNAPSHOT
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - name: Fetch whole git history
         run: |
           git fetch --prune --unshallow
@@ -53,7 +62,25 @@ jobs:
       - name: Build with Maven
         run: |
           mvn --file pom.xml --batch-mode \
-            verify -P ci-run
+            install -P ci-run
+      - name: Run simple test project analysis
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+        working-directory: ./src/test/projects/simple
+        run: |
+          mvn --file pom.xml --batch-mode \
+            sonar:sonar sonar-quality-gate:check \
+            -Dsonar.login=$SONARCLOUD_TOKEN
+      - name: Run multi-module test project analysis
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+        working-directory: ./src/test/projects/multi-module
+        run: |
+          mvn --file pom.xml --batch-mode \
+            sonar:sonar sonar-quality-gate:check \
+            -Dsonar.login=$SONARCLOUD_TOKEN
       - name: Sonar Analysis with Maven (sonarcloud.io) - Branch
         if: github.event_name == 'push'
         env:
