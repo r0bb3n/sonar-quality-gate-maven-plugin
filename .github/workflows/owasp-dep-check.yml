@@ -4,14 +4,38 @@ name: OWASP Dependency Checker
 
 on:
   schedule:
-    - cron:  '27 5 * * 5'
-#    - cron:  '10 20 1 4 *'
+    - cron: '27 5 * * 5'
 
 jobs:
-  check:
-
+  check-master:
     runs-on: ubuntu-latest
-
+    steps:
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Checkout `master` branch
+        uses: actions/checkout@v2
+        with:
+          ref: master
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-owasp-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-owasp-
+      - name: Run OWASP Dependency Checker for `master`
+        run: |
+          mvn --file pom.xml --batch-mode \
+            dependency-check:check -P vuln-check
+      - name: Upload dependency report for master branch
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: dep-report-master
+          path: target/dependency-check-report.html
+  check-latest:
+    runs-on: ubuntu-latest
     steps:
       - name: Set up JDK 11
         uses: actions/setup-java@v1
@@ -21,6 +45,13 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: latest
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-owasp-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-owasp-
       - name: Run OWASP Dependency Checker for `latest`
         # don't run for version 1.0.2 since it has no proper profile
         env:
@@ -41,18 +72,4 @@ jobs:
         uses: actions/upload-artifact@v1.0.0
         with:
           name: dep-report-latest
-          path: target/dependency-check-report.html
-      - name: Checkout `master` branch
-        uses: actions/checkout@v2
-        with:
-          ref: master
-          clean: true
-      - name: Run OWASP Dependency Checker for `master`
-        run: |
-          mvn --file pom.xml --batch-mode \
-            dependency-check:check -P vuln-check
-      - name: Upload dependency report for master branch
-        uses: actions/upload-artifact@v1.0.0
-        with:
-          name: dep-report-master
           path: target/dependency-check-report.html
