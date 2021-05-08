@@ -27,6 +27,13 @@ jobs:
           java-version: 11
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - name: Fetch whole git history
         run: |
           git fetch --prune --unshallow
