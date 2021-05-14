@@ -64,6 +64,7 @@ jobs:
           mvn --file pom.xml --batch-mode \
             install -P ci-run
       - name: Run simple test project analysis
+        if: github.event_name == 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
@@ -73,6 +74,7 @@ jobs:
             sonar:sonar sonar-quality-gate:check \
             -Dsonar.login=$SONARCLOUD_TOKEN
       - name: Run multi-module test project analysis
+        if: github.event_name == 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
