@@ -71,7 +71,7 @@
     <sonar.java.pmd.reportPaths>target/pmd.xml,target/cpd.xml</sonar.java.pmd.reportPaths>
     <sonar.exclusions>.idea/**</sonar.exclusions>
 
-    <version.jackson>2.12.3</version.jackson>
+    <version.jackson>2.12.4</version.jackson>
     <version.log4j>2.14.1</version.log4j>
     <version.hamcrest>2.2</version.hamcrest>
   </properties>
