@@ -111,6 +111,13 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private int checkTaskIntervalS;
 
   /**
+   * Set this to "true" to ignore a failure during testing. Its use is NOT RECOMMENDED, but quite convenient on
+   * occasion.
+   */
+  @Parameter(property = "maven.test.failure.ignore", defaultValue = "false")
+  protected Boolean testFailureIgnore;
+
+  /**
    * INTERNAL - get build directory
    */
   @Parameter(defaultValue = "${project.build.directory}", readonly = true)
@@ -164,9 +171,13 @@ public class SonarQualityGateMojo extends AbstractMojo {
       String failedConditions = projectStatus.getConditions().stream()
           .filter(has(ProjectStatus.Status.OK, ProjectStatus.Status.NONE).negate())
           .map(c -> c.getMetricKey() + ":" + c.getStatus()).collect(Collectors.joining(", "));
-      throw new MojoFailureException(String
-          .format("Quality Gate not passed (status: %s)! Failed metric(s): %s",
-              projectStatus.getStatus(), failedConditions));
+      String message = String.format("Quality Gate not passed (status: %s)! Failed metric(s): %s",
+          projectStatus.getStatus(), failedConditions);
+      if (!testFailureIgnore) {
+        throw new MojoFailureException(message);
+      } else {
+        getLog().info(message);
+      }
     } else {
       getLog().info("project status: " + projectStatus.getStatus());
     }
