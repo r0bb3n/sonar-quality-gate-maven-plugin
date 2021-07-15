@@ -86,6 +86,12 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private String sonarPassword;
 
   /**
+   * skip the execution of this plugin
+   */
+  @Parameter(property = "sonar-quality-gate.skip", defaultValue = "false")
+  private boolean skip;
+
+  /**
    * name of the branch to check the quality gate in sonar
    */
   @Parameter(property = "sonar-quality-gate.branch")
@@ -123,6 +129,11 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * @throws MojoFailureException quality gate evaluates as not passed
    */
   public void execute() throws MojoExecutionException, MojoFailureException {
+    if (skip) {
+      getLog().info("skipped");
+      return;
+    }
+
     if (Util.isBlank(sonarLogin) && !Util.isBlank(sonarPassword)) {
       throw new MojoExecutionException(String
           .format("you cannot specify '%s' without '%s'", PROP_SONAR_PASSWORD, PROP_SONAR_LOGIN));
