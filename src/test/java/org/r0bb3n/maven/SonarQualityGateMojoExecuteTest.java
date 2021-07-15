@@ -143,4 +143,13 @@ public class SonarQualityGateMojoExecuteTest {
     Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any(), Mockito.any());
   }
 
+  @Test
+  public void mojoExecuteWithSkipEnabled() throws Exception {
+    MojoConfigurator.configure(underTestSpy).setSkip(true);
+
+    underTestSpy.execute();
+    // assert is difficult - let's check, if a log gets written for skipping
+    Mockito.verify(logSpy).info("skipped");
+  }
+
 }

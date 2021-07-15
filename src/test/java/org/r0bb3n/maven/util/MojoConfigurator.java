@@ -57,6 +57,11 @@ public class MojoConfigurator {
     return this;
   }
 
+  public MojoConfigurator setSkip(boolean skip) throws Exception {
+    setField("skip", skip);
+    return this;
+  }
+
   public MojoConfigurator setBranch(String branch) throws Exception {
     setField("branch", branch);
     return this;
