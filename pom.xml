@@ -10,7 +10,11 @@
   <description>The Sonar Quality Gate Maven Plugin checks the project status in SonarQube and fails
     the maven job when the Quality Gate is not passed.
   </description>
-  <url>https://github.com/r0bb3n/sonar-quality-gate-maven-plugin</url>
+  <url>https://r0bb3n.github.com/sonar-quality-gate-maven-plugin</url>
+  <prerequisites>
+    <maven>3</maven>
+  </prerequisites>
+  <inceptionYear>2020</inceptionYear>
 
   <licenses>
     <license>
@@ -25,6 +29,9 @@
     <developer>
       <name>r0bb3n</name>
       <url>https://github.com/r0bb3n</url>
+      <roles>
+        <role>owner</role>
+      </roles>
     </developer>
   </developers>
 
@@ -248,8 +255,13 @@
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <reportSets>
           <reportSet>
-            <reports><!-- select reports -->
+            <reports>
               <report>index</report>
+              <report>scm</report>
+              <report>ci-management</report>
+              <report>issue-management</report>
+              <report>team</report>
+              <report>licenses</report>
             </reports>
           </reportSet>
         </reportSets>
