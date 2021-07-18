@@ -1,0 +1,25 @@
+{
+  "id": "4fa727ca-27d7-4c1f-9745-a9da494c901b",
+  "name": "api_qualitygates_project_status",
+  "request": {
+    "url": "/api/qualitygates/project_status?projectKey=io.github.r0bb3n%3Asonar-quality-gate-maven-plugin_WARN",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"projectStatus\":{\"status\":\"WARN\",\"conditions\":[{\"status\":\"OK\",\"metricKey\":\"new_reliability_rating\",\"comparator\":\"GT\",\"periodIndex\":1,\"errorThreshold\":\"1\",\"actualValue\":\"1\"},{\"status\":\"OK\",\"metricKey\":\"reliability_rating\",\"comparator\":\"GT\",\"errorThreshold\":\"1\",\"actualValue\":\"1\"},{\"status\":\"OK\",\"metricKey\":\"new_security_rating\",\"comparator\":\"GT\",\"periodIndex\":1,\"errorThreshold\":\"1\",\"actualValue\":\"1\"},{\"status\":\"WARN\",\"metricKey\":\"security_rating\",\"comparator\":\"GT\",\"errorThreshold\":\"1\",\"actualValue\":\"2\"},{\"status\":\"OK\",\"metricKey\":\"new_maintainability_rating\",\"comparator\":\"GT\",\"periodIndex\":1,\"errorThreshold\":\"1\",\"actualValue\":\"1\"},{\"status\":\"OK\",\"metricKey\":\"sqale_rating\",\"comparator\":\"GT\",\"errorThreshold\":\"1\",\"actualValue\":\"1\"},{\"status\":\"OK\",\"metricKey\":\"new_duplicated_lines_density\",\"comparator\":\"GT\",\"periodIndex\":1,\"errorThreshold\":\"3\",\"actualValue\":\"0.0\"},{\"status\":\"OK\",\"metricKey\":\"new_violations\",\"comparator\":\"GT\",\"periodIndex\":1,\"errorThreshold\":\"0\",\"actualValue\":\"0\"},{\"status\":\"OK\",\"metricKey\":\"violations\",\"comparator\":\"GT\",\"errorThreshold\":\"0\",\"actualValue\":\"0\"}],\"periods\":[{\"index\":1,\"mode\":\"previous_version\",\"date\":\"2020-03-27T23:16:01+0100\",\"parameter\":\"1.0.2\"}],\"ignoredConditions\":false}}",
+    "headers": {
+      "Date": "Wed, 24 Feb 2021 19:25:59 GMT",
+      "Content-Type": "application/json",
+      "X-Frame-Options": "SAMEORIGIN",
+      "X-XSS-Protection": "1; mode=block",
+      "X-Content-Type-Options": "nosniff",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Sonar-Version": "8.5.0.37579",
+      "vary": "accept-encoding"
+    }
+  },
+  "uuid": "4fa727ca-27d7-4c1f-9745-a9da494c901b",
+  "persistent": true,
+  "insertionIndex": 9
+}

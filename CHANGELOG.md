@@ -9,10 +9,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- support for skipping execution via
-  parameter ([#115](https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/115))
+- parameter `failOnMiss` to edit failure behavior ([#118])
+- support for skipping execution via parameter ([#115])
 
 [unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.1.0...HEAD
+[#118]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/118
+[#115]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/115
 
 ## [1.1.0]
 

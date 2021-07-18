@@ -92,6 +92,12 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private boolean skip;
 
   /**
+   * fail the execution, if the quality gate was not passed (not `OK`)
+   */
+  @Parameter(property = "sonar-quality-gate.failOnMiss", defaultValue = "true")
+  private boolean failOnMiss;
+
+  /**
    * name of the branch to check the quality gate in sonar
    */
   @Parameter(property = "sonar-quality-gate.branch")
@@ -175,9 +181,13 @@ public class SonarQualityGateMojo extends AbstractMojo {
       String failedConditions = projectStatus.getConditions().stream()
           .filter(has(ProjectStatus.Status.OK, ProjectStatus.Status.NONE).negate())
           .map(c -> c.getMetricKey() + ":" + c.getStatus()).collect(Collectors.joining(", "));
-      throw new MojoFailureException(String
-          .format("Quality Gate not passed (status: %s)! Failed metric(s): %s",
-              projectStatus.getStatus(), failedConditions));
+      String message = String.format("Quality Gate not passed (status: %s)! Failed metric(s): %s",
+          projectStatus.getStatus(), failedConditions);
+      if (failOnMiss) {
+        throw new MojoFailureException(message);
+      } else {
+        getLog().warn(message);
+      }
     } else {
       getLog().info("project status: " + projectStatus.getStatus());
     }

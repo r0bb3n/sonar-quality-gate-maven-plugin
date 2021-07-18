@@ -20,12 +20,13 @@ import java.lang.reflect.Field;
 import java.net.URL;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.r0bb3n.maven.SonarQualityGateMojo;
 
 /**
  * Util that provides allows configuring of a Mojo.
  *
- * Reflection is used, because using @Parameter annotation of a Mojo
+ * <p>Reflection is used, because using @Parameter annotation of a Mojo
  * class is not possible, since the annotation is not available during runtime
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -40,6 +41,10 @@ public class MojoConfigurator {
   public MojoConfigurator setSonarHostUrl(URL sonarHostUrl) throws Exception {
     setField("sonarHostUrl", sonarHostUrl);
     return this;
+  }
+
+  public MojoConfigurator setSonarHostUrl(String sonarHostUrl) throws Exception {
+    return setSonarHostUrl(new URL(sonarHostUrl));
   }
 
   public MojoConfigurator setSonarProjectKey(String sonarProjectKey) throws Exception {
@@ -62,6 +67,11 @@ public class MojoConfigurator {
     return this;
   }
 
+  public MojoConfigurator setFailOnMiss(boolean failOnMiss) throws Exception {
+    setField("failOnMiss", failOnMiss);
+    return this;
+  }
+
   public MojoConfigurator setBranch(String branch) throws Exception {
     setField("branch", branch);
     return this;
@@ -80,6 +90,19 @@ public class MojoConfigurator {
 
   public MojoConfigurator setCheckTaskIntervalS(int checkTaskIntervalS) throws Exception {
     setField("checkTaskIntervalS", checkTaskIntervalS);
+    return this;
+  }
+
+  /**
+   * Unfortunately the {@link Parameter} is not available during runtime, therefore this method
+   * statically sets the defaults declared in the annotation (except for
+   * {@link SonarQualityGateMojo#sonarProjectKey} since it makes use of expressions)
+   *
+   */
+  public MojoConfigurator applyDefaults() throws Exception {
+    setSonarHostUrl("http://localhost:9000");
+    setSkip(false).setFailOnMiss(true);
+    setCheckTaskAttempts(10).setCheckTaskIntervalS(5);
     return this;
   }
 
