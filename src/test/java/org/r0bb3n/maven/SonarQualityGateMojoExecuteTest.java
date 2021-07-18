@@ -113,7 +113,7 @@ public class SonarQualityGateMojoExecuteTest {
 
     underTestSpy.execute();
 
-    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any(), Mockito.any());
+    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any());
     // assert is difficult - let's check, if a final positive log gets written
     Mockito.verify(logSpy).info("project status: OK");
   }
@@ -129,7 +129,7 @@ public class SonarQualityGateMojoExecuteTest {
     Mockito.verify(logSpy).warn(
         MockitoHamcrest.argThat(Matchers.startsWith("Quality Gate not passed (status: WARN)!")));
 
-    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any(), Mockito.any());
+    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any());
   }
 
   @Test
@@ -142,7 +142,7 @@ public class SonarQualityGateMojoExecuteTest {
     MatcherAssert.assertThat(exc, ExceptionMatchers
         .hasMessageThat(Matchers.startsWith("Quality Gate not passed (status: NONE)!")));
 
-    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any(), Mockito.any());
+    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any());
   }
 
   @Test
@@ -155,7 +155,7 @@ public class SonarQualityGateMojoExecuteTest {
     MatcherAssert.assertThat(exc, ExceptionMatchers
         .hasMessageThat(Matchers.startsWith("Quality Gate not passed (status: WARN)!")));
 
-    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any(), Mockito.any());
+    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any());
   }
 
   @Test
