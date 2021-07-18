@@ -117,4 +117,5 @@ public class SonarQualityGateMojoConfigTest {
     Files.writeString(taskFile, sb, StandardCharsets.UTF_8);
     return buildDir;
   }
+
 }

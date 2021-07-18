@@ -27,6 +27,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import lombok.SneakyThrows;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -92,6 +93,12 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private boolean skip;
 
   /**
+   * fail the execution, if the quality gate was not passed (not `OK`)
+   */
+  @Parameter(property = "sonar-quality-gate.failOnMiss", defaultValue = "true")
+  private boolean failOnMiss;
+
+  /**
    * name of the branch to check the quality gate in sonar
    */
   @Parameter(property = "sonar-quality-gate.branch")
@@ -123,6 +130,11 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private String projectBuildDirectory;
 
   /**
+   * connector instance to interact with sonar server
+   */
+  private SonarConnector sonarConnector;
+
+  /**
    * request project status from sonar and evaluate quality gate result
    *
    * @throws MojoExecutionException configuration errors, io problems, ...
@@ -134,28 +146,62 @@ public class SonarQualityGateMojo extends AbstractMojo {
       return;
     }
 
-    if (Util.isBlank(sonarLogin) && !Util.isBlank(sonarPassword)) {
-      throw new MojoExecutionException(String
-          .format("you cannot specify '%s' without '%s'", PROP_SONAR_PASSWORD, PROP_SONAR_LOGIN));
-    }
-    SonarConnector sonarConnector =
-        new SonarConnector(getLog(), sonarHostUrl, sonarLogin, sonarPassword, sonarProjectKey);
+    setupSonarConnector();
 
     String analysisId;
     if (Util.isBlank(branch) && Util.isBlank(pullRequest)) {
       Optional<String> ceTaskIdOpt = findCeTaskId(projectBuildDirectory);
-      if (ceTaskIdOpt.isPresent()) {
-        // previous sonar run found, switching to 'integrated'
-        analysisId = retrieveAnalysisId(sonarConnector, ceTaskIdOpt.get());
-      } else {
-        // no previous sonar run found, switching to 'simple'
-        analysisId = null;
-      }
+      analysisId = ceTaskIdOpt
+          // previous sonar run found, switching to 'integrated'
+          .map(this::retrieveAnalysisId)
+          // no previous sonar run found, switching to 'simple'
+          .orElse(null);
     } else {
       // branch or PR was supplied, the 'advanced' mode was chosen
       analysisId = null;
     }
 
+    ProjectStatus projectStatus = retrieveProjectStatus(analysisId);
+
+    if (projectStatus.getStatus() != ProjectStatus.Status.OK) {
+      String failedConditions = projectStatus.getConditions().stream()
+          .filter(has(ProjectStatus.Status.OK, ProjectStatus.Status.NONE).negate())
+          .map(c -> c.getMetricKey() + ":" + c.getStatus()).collect(Collectors.joining(", "));
+      String message = String.format("Quality Gate not passed (status: %s)! Failed metric(s): %s",
+          projectStatus.getStatus(), failedConditions);
+      if (failOnMiss) {
+        throw new MojoFailureException(message);
+      } else {
+        getLog().warn(message);
+      }
+    } else {
+      getLog().info("project status: " + projectStatus.getStatus());
+    }
+  }
+
+  /**
+   * Read config parameters and create the {@link #sonarConnector}
+   * @throws MojoExecutionException in case of invalid config parameters
+   */
+  protected void setupSonarConnector() throws MojoExecutionException {
+    if (Util.isBlank(sonarLogin) && !Util.isBlank(sonarPassword)) {
+      throw new MojoExecutionException(String
+          .format("you cannot specify '%s' without '%s'", PROP_SONAR_PASSWORD, PROP_SONAR_LOGIN));
+    }
+    sonarConnector =
+        new SonarConnector(getLog(), sonarHostUrl, sonarLogin, sonarPassword, sonarProjectKey);
+  }
+
+  /**
+   * Call sonar server and retrieve the project status by either a recent analysis or by static
+   * values for project, branch or pull request
+   *
+   * @param analysisId the actual analysis id to check for or {@code null} in case of
+   *                   'simple' or 'advanced' mode
+   * @return the project status
+   * @throws MojoExecutionException in case of IO issues or interruption
+   */
+  protected ProjectStatus retrieveProjectStatus(String analysisId) throws MojoExecutionException {
     ProjectStatus projectStatus;
     try {
       if (analysisId != null) {
@@ -171,23 +217,7 @@ public class SonarQualityGateMojo extends AbstractMojo {
       Thread.currentThread().interrupt();
       throw new MojoExecutionException("Interrupted while fetching project status", e);
     }
-    if (projectStatus.getStatus() != ProjectStatus.Status.OK) {
-      String failedConditions = projectStatus.getConditions().stream()
-          .filter(has(ProjectStatus.Status.OK, ProjectStatus.Status.NONE).negate())
-          .map(c -> c.getMetricKey() + ":" + c.getStatus()).collect(Collectors.joining(", "));
-      throw new MojoFailureException(String
-          .format("Quality Gate not passed (status: %s)! Failed metric(s): %s",
-              projectStatus.getStatus(), failedConditions));
-    } else {
-      getLog().info("project status: " + projectStatus.getStatus());
-    }
-  }
-
-  /**
-   * create a predicate to check, if a {@link Condition} has one of the supplied status
-   */
-  private static Predicate<Condition> has(ProjectStatus.Status... status) {
-    return c -> Arrays.asList(status).contains(c.getStatus());
+    return projectStatus;
   }
 
   /**
@@ -195,14 +225,15 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * Task.Status#IN_PROGRESS}/{@link Task.Status#PENDING}), the threads sleeps for {@link
    * #checkTaskIntervalS} and tries in total {@link #checkTaskAttempts} times.
    *
-   * @param sonarConnector connector to sonar server
+   * <p>Throws MojoExecutionException when task got unsuitable status ({@link Task.Status#FAILED}/
+   * {@link Task.Status#CANCELED}) or task is still ongoing but attempt limit is reached or IO
+   * errors.
+   *
    * @param ceTaskId ce task id to gather details (including analysis id)
    * @return analysis id, not null (unavailable id we cause an exception)
-   * @throws MojoExecutionException task got unsuitable status (({@link Task.Status#FAILED}/{@link
-   * Task.Status#CANCELED}) or task is still ongoing but attempt limit is reached or IO errors.
    */
-  protected String retrieveAnalysisId(SonarConnector sonarConnector, String ceTaskId)
-      throws MojoExecutionException {
+  @SneakyThrows(MojoExecutionException.class)
+  protected String retrieveAnalysisId(String ceTaskId) {
     int attemptsLeft = checkTaskAttempts;
     Task.Status status = Task.Status.IN_PROGRESS;
     String analysisId = null;
@@ -279,6 +310,13 @@ public class SonarQualityGateMojo extends AbstractMojo {
     } else {
       return Optional.of(ceTaskId);
     }
+  }
+
+  /**
+   * create a predicate to check, if a {@link Condition} has one of the supplied status
+   */
+  private static Predicate<Condition> has(ProjectStatus.Status... status) {
+    return c -> Arrays.asList(status).contains(c.getStatus());
   }
 
 }

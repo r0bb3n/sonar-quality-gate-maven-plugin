@@ -27,4 +27,5 @@ public class ProjectStatusContainer implements Container<ProjectStatus> {
   public ProjectStatus getContent() {
     return projectStatus;
   }
+
 }

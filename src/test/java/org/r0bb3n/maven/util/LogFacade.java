@@ -106,4 +106,5 @@ public class LogFacade implements Log {
   public void error(Throwable error) {
     log.error(error);
   }
+
 }

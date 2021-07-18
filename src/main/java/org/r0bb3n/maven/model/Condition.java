@@ -30,4 +30,5 @@ public class Condition {
 
   private ProjectStatus.Status status;
   private String metricKey;
+
 }

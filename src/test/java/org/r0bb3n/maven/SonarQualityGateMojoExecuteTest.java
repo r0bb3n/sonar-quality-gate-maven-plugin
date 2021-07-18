@@ -18,7 +18,6 @@ package org.r0bb3n.maven;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
-import java.net.URL;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -32,6 +31,7 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.hamcrest.MockitoHamcrest;
 import org.r0bb3n.maven.util.ExceptionMatchers;
 import org.r0bb3n.maven.util.LogFacade;
 import org.r0bb3n.maven.util.MojoConfigurator;
@@ -60,7 +60,8 @@ public class SonarQualityGateMojoExecuteTest {
   @Before
   public void setUp() throws Exception {
     SonarQualityGateMojo underTest = new SonarQualityGateMojo();
-    MojoConfigurator.configure(underTest).setSonarHostUrl(new URL(wireMockClassRule.baseUrl()))
+    MojoConfigurator.configure(underTest).applyDefaults()
+        .setSonarHostUrl(wireMockClassRule.baseUrl())
         .setSonarProjectKey("io.github.r0bb3n:sonar-quality-gate-maven-plugin")
         .setCheckTaskAttempts(10).setCheckTaskIntervalS(1);
     underTestSpy = Mockito.spy(underTest);
@@ -112,9 +113,23 @@ public class SonarQualityGateMojoExecuteTest {
 
     underTestSpy.execute();
 
-    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any(), Mockito.any());
+    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any());
     // assert is difficult - let's check, if a final positive log gets written
     Mockito.verify(logSpy).info("project status: OK");
+  }
+
+  @Test
+  public void mojoExecuteWithProjectKeyWarnNoFailOnMiss() throws Exception {
+    MojoConfigurator.configure(underTestSpy).setFailOnMiss(false)
+        .setSonarProjectKey("io.github.r0bb3n:sonar-quality-gate-maven-plugin_WARN");
+    Mockito.doAnswer(invocation -> Optional.empty()).when(underTestSpy).findCeTaskId(Mockito.any());
+
+    underTestSpy.execute();
+
+    Mockito.verify(logSpy).warn(
+        MockitoHamcrest.argThat(Matchers.startsWith("Quality Gate not passed (status: WARN)!")));
+
+    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any());
   }
 
   @Test
@@ -127,7 +142,7 @@ public class SonarQualityGateMojoExecuteTest {
     MatcherAssert.assertThat(exc, ExceptionMatchers
         .hasMessageThat(Matchers.startsWith("Quality Gate not passed (status: NONE)!")));
 
-    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any(), Mockito.any());
+    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any());
   }
 
   @Test
@@ -140,7 +155,7 @@ public class SonarQualityGateMojoExecuteTest {
     MatcherAssert.assertThat(exc, ExceptionMatchers
         .hasMessageThat(Matchers.startsWith("Quality Gate not passed (status: WARN)!")));
 
-    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any(), Mockito.any());
+    Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any());
   }
 
   @Test

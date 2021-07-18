@@ -37,4 +37,5 @@ public class UtilTest {
     assertTrue("wrong return on: \"\\t\"", Util.isBlank("\t"));
     assertFalse("wrong return on: \"data\"", Util.isBlank("data"));
   }
+
 }

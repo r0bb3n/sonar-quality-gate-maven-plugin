@@ -9,10 +9,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- support for skipping execution via
-  parameter ([#115](https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/115))
+- add parameter `skip` to support skipping the execution via config ([#115])
+- add parameter `failOnMiss` to change failure behavior ([#118])
 
 [unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.1.0...HEAD
+[#115]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/115
+[#118]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/118
 
 ## [1.1.0]
 
@@ -56,7 +58,7 @@ First version to be published to Maven Central. This requires some modification 
 
 - three modes defined: integrated, simple, advanced
 - integrated mode: 
-  - read meta data from previous run of sonar-maven-plugin to find correct analysis job
+  - read metadata from previous run of sonar-maven-plugin to find correct analysis job
   - wait for analysis evaluated in SonarQube (polling for status updates)
 
 ### Changed
