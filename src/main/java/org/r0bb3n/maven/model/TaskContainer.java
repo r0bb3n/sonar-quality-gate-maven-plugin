@@ -27,4 +27,5 @@ public class TaskContainer implements Container<Task> {
   public Task getContent() {
     return task;
   }
+
 }

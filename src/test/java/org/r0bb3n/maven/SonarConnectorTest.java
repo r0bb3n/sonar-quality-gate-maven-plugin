@@ -81,4 +81,5 @@ public class SonarConnectorTest {
     assertEquals("Status mismatch", ProjectStatus.Status.OK, projectStatus.getStatus());
     log.trace(projectStatus);
   }
+
 }

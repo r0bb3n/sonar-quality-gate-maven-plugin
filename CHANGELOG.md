@@ -58,7 +58,7 @@ First version to be published to Maven Central. This requires some modification 
 
 - three modes defined: integrated, simple, advanced
 - integrated mode: 
-  - read meta data from previous run of sonar-maven-plugin to find correct analysis job
+  - read metadata from previous run of sonar-maven-plugin to find correct analysis job
   - wait for analysis evaluated in SonarQube (polling for status updates)
 
 ### Changed

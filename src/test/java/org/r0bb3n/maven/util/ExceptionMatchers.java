@@ -44,7 +44,7 @@ public class ExceptionMatchers {
    * @return Exception matcher
    */
   public static Matcher<Exception> hasMessageThat(Matcher<String> msgMatcher) {
-    return new CustomMatcher<Exception>("Exeption message matching: " + msgMatcher) {
+    return new CustomMatcher<>("Exception message matching: " + msgMatcher) {
       @Override
       public boolean matches(Object actual) {
         return actual instanceof Exception && msgMatcher.matches(((Exception) actual).getMessage());
@@ -62,4 +62,5 @@ public class ExceptionMatchers {
       }
     };
   }
+
 }

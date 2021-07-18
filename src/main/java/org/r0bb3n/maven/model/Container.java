@@ -22,4 +22,5 @@ public interface Container<T> {
 
   @JsonIgnore
   T getContent();
+
 }

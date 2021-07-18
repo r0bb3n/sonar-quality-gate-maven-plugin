@@ -88,8 +88,9 @@ public class SonarConnectorProjectStatusTest {
     ProjectStatus projectStatus = underTest.retrieveProjectStatus(branch, pullRequest);
     assertNotNull("no projectStatus found", projectStatus);
     assertEquals("Unexpected status value", ProjectStatus.Status.OK, projectStatus.getStatus());
-    assertEquals("Unexpected condtions count", conditionsSize,
+    assertEquals("Unexpected conditions count", conditionsSize,
         projectStatus.getConditions().size());
     log.trace(projectStatus);
   }
+
 }
