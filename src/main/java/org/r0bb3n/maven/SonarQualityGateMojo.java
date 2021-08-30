@@ -53,6 +53,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * sonar host url<br/> aligned to sonar-maven-plugin analysis parameters, see also
    * <a href="https://docs.sonarqube.org/latest/analysis/analysis-parameters/">SonarQube - Analysis
    * Parameters</a>
+   *
+   * @since 1.0.0
    */
   @Parameter(property = PROP_SONAR_HOST_URL, defaultValue = "http://localhost:9000")
   private URL sonarHostUrl;
@@ -62,6 +64,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * parameters, see also
    * <a href="https://docs.sonarqube.org/latest/analysis/analysis-parameters/">SonarQube - Analysis
    * Parameters</a>
+   *
+   * @since 1.0.0
    */
   @Parameter(property = "sonar.projectKey",
       defaultValue = "${project.groupId}:${project.artifactId}")
@@ -73,6 +77,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * - Web API Authentication</a> <br/> aligned to sonar-maven-plugin analysis parameters, see also
    * <a href="https://docs.sonarqube.org/latest/analysis/analysis-parameters/">SonarQube - Analysis
    * Parameters</a>
+   *
+   * @since 1.0.0
    */
   @Parameter(property = PROP_SONAR_LOGIN)
   private String sonarLogin;
@@ -82,30 +88,40 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * - Web API Authentication</a> <br/> aligned to sonar-maven-plugin analysis parameters, see also
    * <a href="https://docs.sonarqube.org/latest/analysis/analysis-parameters/">SonarQube - Analysis
    * Parameters</a>
+   *
+   * @since 1.0.0
    */
   @Parameter(property = PROP_SONAR_PASSWORD)
   private String sonarPassword;
 
   /**
    * skip the execution of this plugin
+   *
+   * @since 1.2.0
    */
   @Parameter(property = "sonar-quality-gate.skip", defaultValue = "false")
   private boolean skip;
 
   /**
    * fail the execution, if the quality gate was not passed (not `OK`)
+   *
+   * @since 1.2.0
    */
   @Parameter(property = "sonar-quality-gate.failOnMiss", defaultValue = "true")
   private boolean failOnMiss;
 
   /**
    * name of the branch to check the quality gate in sonar
+   *
+   * @since 1.0.0
    */
   @Parameter(property = "sonar-quality-gate.branch")
   private String branch;
 
   /**
    * name of the pull request to check the quality gate in sonar
+   *
+   * @since 1.0.0
    */
   @Parameter(property = "sonar-quality-gate.pullRequest")
   private String pullRequest;
@@ -113,12 +129,16 @@ public class SonarQualityGateMojo extends AbstractMojo {
   /**
    * How often try to retrieve the analysis id from the task details in sonar until stopping the
    * job
+   *
+   * @since 1.0.0
    */
   @Parameter(property = "sonar-quality-gate.checkTask.attempts", defaultValue = "10")
   private int checkTaskAttempts;
 
   /**
    * How many seconds to wait between two requests when retrieving task details
+   *
+   * @since 1.0.0
    */
   @Parameter(property = "sonar-quality-gate.checkTask.interval.s", defaultValue = "5")
   private int checkTaskIntervalS;
