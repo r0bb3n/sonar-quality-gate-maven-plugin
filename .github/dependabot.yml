@@ -1,0 +1,22 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  reviewers:
+  - r0bb3n
+  assignees:
+  - r0bb3n
+  allow:
+  - dependency-type: all
+  ignore:
+  - dependency-name: org.eclipse.jetty:jetty-bom
+    versions:
+    - ">= 10.a, < 12"
+  - dependency-name: org.owasp:dependency-check-maven
+    versions:
+    - 6.1.0
+  commit-message:
+    prefix: "[dependabot]"
