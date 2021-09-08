@@ -14,10 +14,7 @@ updates:
   ignore:
   - dependency-name: org.eclipse.jetty:jetty-bom
     versions:
-    - ">= 10.a, < 11"
-  - dependency-name: org.eclipse.jetty:jetty-bom
-    versions:
-    - ">= 11.a, < 12"
+    - ">= 10.a, < 12"
   - dependency-name: org.owasp:dependency-check-maven
     versions:
     - 6.1.0
