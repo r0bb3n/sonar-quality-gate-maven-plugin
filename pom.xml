@@ -150,7 +150,7 @@
       <plugins>
         <plugin>
           <artifactId>maven-plugin-plugin</artifactId>
-          <version>3.6.1</version>
+          <version>3.6.2</version>
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -218,7 +218,7 @@
         <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>
           <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.9.0.2155</version>
+          <version>3.9.1.2184</version>
         </plugin>
         <plugin>
           <groupId>org.sonatype.plugins</groupId>
@@ -228,7 +228,7 @@
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
-          <version>6.3.2</version>
+          <version>6.5.0</version>
         </plugin>
         <plugin>
           <artifactId>maven-site-plugin</artifactId>
@@ -417,13 +417,13 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
-      <version>3.8.2</version>
+      <version>3.8.4</version>
     </dependency>
     <!-- dependencies to annotations -->
     <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
       <artifactId>maven-plugin-annotations</artifactId>
-      <version>3.6.1</version>
+      <version>3.6.2</version>
       <scope>provided</scope>
     </dependency>
 
