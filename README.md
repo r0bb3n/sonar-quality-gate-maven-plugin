@@ -148,10 +148,11 @@ This endpoint is used to retrieve the analysis id of a prior sonar-maven-plugin 
 mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=<release version> -Dtag=v<release version>
 ```
 
-**_perform_** - checkout version tag, create binaries and deploy via oss.sonatype.org to Maven Central
+**_perform_** - checkout version tag, create binaries and deploy via oss.sonatype.org to Maven Central and create
+documentation ("site") and push to `gh-pages` branch.
 
 ```
-mvn -B release:perform
+mvn -B release:perform -DreleaseProfiles=build-for-release
 ```
 
 **_clean_** - remove backup/work file (useful if you ran prepare but not perform)
@@ -162,6 +163,10 @@ mvn -B release:clean
 
 ### How-To release
 
+0. Ensure the right git configs (username, email, signing stuff, ...) are set on `--global` level (correct `.gitconfig`
+   file in user home) - config done on level `--local` is not respected by additional steps that take place in 
+   subdirectories of `target` with fresh full-checkouts of the repo (e.g. commits/push during `site-deploy` via
+   `maven-scm-publish-plugin`).
 1. Update `CHANGELOG.md`: add a section for the upcoming version and move all "unpublished" changes to it
 2. Update `README.md`: replace all occurrences of previous version number with upcoming version
 3. persist:
