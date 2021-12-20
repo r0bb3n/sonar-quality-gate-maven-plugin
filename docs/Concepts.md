@@ -39,3 +39,6 @@ Create a new long-running branch that only contains documentation in the root st
 #### Cons
 
 - no direct link to related sources
+- Since it uses a dedicated folder as checkout target, all local git configs have no effect. Thus, it is required, to 
+  have all relevant config as part of the `--global` level, when running the release process.
+- A manual tag `v#.#.#-site` is required, to identify the exact documentation for a released version. 

@@ -169,18 +169,20 @@ mvn -B release:clean
    `maven-scm-publish-plugin`).
 1. Update `CHANGELOG.md`: add a section for the upcoming version and move all "unpublished" changes to it
 2. Update `README.md`: replace all occurrences of previous version number with upcoming version
-3. persist:
+3. Persist:
    `git add CHANGELOG.md README.md && git commit -m "prepare for release: update CHANGELOG.md/README.md" && git push`
-4. create release in git repo:
+4. Create release in git repo:
    `mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.1.0 -Dtag=v1.1.0`
-5. create and publish binaries:
+5. Create and publish binaries and documentation:
    `mvn -B release:perform -DreleaseProfiles=build-for-release`
-6. Create new release on GitHub ([here](https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/releases/new))
+6. Create and push a tag for the site branch. Change into directory `target/site` and fire the according commands:
+   `git tag v1.1.0-site && git push origin v1.1.0-site`
+7. Create new release on GitHub ([here](https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/releases/new))
    - choose tag: v1.1.0
    - set title: 1.1.0
    - copy the `CHANGELOG.md` content of the released version
    - upload the files `./target/checkout/target/*.(pom|jar|asc)`
-7. publish [staging repository of oss nexus repository](https://oss.sonatype.org/#stagingRepositories)
+8. publish [staging repository of oss nexus repository](https://oss.sonatype.org/#stagingRepositories)
    (login required) to maven
    central ([overview doc](https://central.sonatype.org/pages/ossrh-guide.html#releasing-to-central)
    / [detailed doc](https://central.sonatype.org/pages/releasing-the-deployment.html))
