@@ -200,6 +200,7 @@
             <failsOnError>false</failsOnError>
             <!-- excludes works only on package level -->
             <excludes>**/generated/**/*.java</excludes>
+            <violationSeverity>warning</violationSeverity>
           </configuration>
           <dependencies>
             <dependency>
@@ -333,9 +334,13 @@
               <execution>
                 <id>check-sources</id>
                 <goals>
-                  <goal>checkstyle</goal>
+                  <goal>check</goal>
                 </goals>
                 <phase>verify</phase>
+                <configuration>
+                  <failOnViolation>true</failOnViolation>
+                  <failsOnError>true</failsOnError>
+                </configuration>
               </execution>
             </executions>
           </plugin>
