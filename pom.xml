@@ -201,6 +201,13 @@
             <!-- excludes works only on package level -->
             <excludes>**/generated/**/*.java</excludes>
           </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>9.2</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <artifactId>maven-pmd-plugin</artifactId>
