@@ -15,5 +15,8 @@ updates:
   - dependency-name: org.eclipse.jetty:jetty-bom
     versions:
     - ">= 10.a, < 12"
+  - dependency-name: org.apache.maven.plugins:maven-pmd-plugin
+    versions:
+    - "3.15.0"
   commit-message:
     prefix: "[dependabot]"
