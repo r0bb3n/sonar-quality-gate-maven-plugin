@@ -356,7 +356,7 @@
                 <configuration>
                   <content>${project.reporting.outputDirectory}</content>
                   <siteOutputEncoding>${project.reporting.outputEncoding}</siteOutputEncoding>
-                  <scmBranch>gh-pages-2</scmBranch>
+                  <scmBranch>gh-pages</scmBranch>
                   <serverId>github-pages</serverId>
                 </configuration>
               </execution>
