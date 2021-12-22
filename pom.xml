@@ -286,6 +286,9 @@
         <artifactId>maven-plugin-plugin</artifactId>
         <configuration>
           <detail>true</detail>
+          <requirements>
+            <jdk>${maven.compiler.release}</jdk>
+          </requirements>
         </configuration>
       </plugin>
     </plugins>
