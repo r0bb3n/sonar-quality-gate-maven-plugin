@@ -50,9 +50,9 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private static final String REPORT_TASK_KEY_CE_TASK_ID = "ceTaskId";
 
   /**
-   * sonar host url<br/> aligned to sonar-maven-plugin analysis parameters, see also
+   * sonar host url<br/> (aligned to sonar-maven-plugin analysis parameters, see also
    * <a href="https://docs.sonarqube.org/latest/analysis/analysis-parameters/">SonarQube - Analysis
-   * Parameters</a>
+   * Parameters</a>)
    *
    * @since 1.0.0
    */
@@ -60,10 +60,11 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private URL sonarHostUrl;
 
   /**
-   * project key used in sonar for this project<br/> aligned to sonar-maven-plugin analysis
-   * parameters, see also
+   * project key used in sonar for this project <br/>
+   * <i>only used in modes: <b>simple</b>, <b>advanced</b></i><br/>
+   * (aligned to sonar-maven-plugin analysis parameters, see also
    * <a href="https://docs.sonarqube.org/latest/analysis/analysis-parameters/">SonarQube - Analysis
-   * Parameters</a>
+   * Parameters</a>)
    *
    * @since 1.0.0
    */
@@ -74,9 +75,9 @@ public class SonarQualityGateMojo extends AbstractMojo {
   /**
    * sonar login (username or token), see also
    * <a href="https://docs.sonarqube.org/latest/extend/web-api/">SonarQube
-   * - Web API Authentication</a> <br/> aligned to sonar-maven-plugin analysis parameters, see also
+   * - Web API Authentication</a> <br/> (aligned to sonar-maven-plugin analysis parameters, see also
    * <a href="https://docs.sonarqube.org/latest/analysis/analysis-parameters/">SonarQube - Analysis
-   * Parameters</a>
+   * Parameters</a>)
    *
    * @since 1.0.0
    */
@@ -85,9 +86,9 @@ public class SonarQualityGateMojo extends AbstractMojo {
 
   /**
    * sonar password, see also <a href="https://docs.sonarqube.org/latest/extend/web-api/">SonarQube
-   * - Web API Authentication</a> <br/> aligned to sonar-maven-plugin analysis parameters, see also
+   * - Web API Authentication</a> <br/> (aligned to sonar-maven-plugin analysis parameters, see also
    * <a href="https://docs.sonarqube.org/latest/analysis/analysis-parameters/">SonarQube - Analysis
-   * Parameters</a>
+   * Parameters</a>)
    *
    * @since 1.0.0
    */
@@ -103,7 +104,7 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private boolean skip;
 
   /**
-   * fail the execution, if the quality gate was not passed (not `OK`)
+   * fail the execution, if the quality gate was not passed (not {@code OK})
    *
    * @since 1.2.0
    */
@@ -111,7 +112,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private boolean failOnMiss;
 
   /**
-   * name of the branch to check the quality gate in sonar
+   * name of the branch to check the quality gate in sonar<br/>
+   * <i>only used in mode: <b>advanced</b></i>
    *
    * @since 1.0.0
    */
@@ -119,7 +121,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private String branch;
 
   /**
-   * name of the pull request to check the quality gate in sonar
+   * name of the pull request to check the quality gate in sonar<br/>
+   * <i>only used in mode: <b>advanced</b></i>
    *
    * @since 1.0.0
    */
@@ -128,7 +131,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
 
   /**
    * How often try to retrieve the analysis id from the task details in sonar until stopping the
-   * job
+   * job<br/>
+   * <i>only used in mode: <b>integrated</b></i>
    *
    * @since 1.0.0
    */
@@ -136,7 +140,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private int checkTaskAttempts;
 
   /**
-   * How many seconds to wait between two requests when retrieving task details
+   * How many seconds to wait between two requests when retrieving task details<br/>
+   * <i>only used in mode: <b>integrated</b></i>
    *
    * @since 1.0.0
    */
@@ -205,8 +210,9 @@ public class SonarQualityGateMojo extends AbstractMojo {
    */
   protected void setupSonarConnector() throws MojoExecutionException {
     if (Util.isBlank(sonarLogin) && !Util.isBlank(sonarPassword)) {
-      throw new MojoExecutionException(String
-          .format("you cannot specify '%s' without '%s'", PROP_SONAR_PASSWORD, PROP_SONAR_LOGIN));
+      throw new MojoExecutionException(
+          String.format("you cannot specify '%s' without '%s'", PROP_SONAR_PASSWORD,
+              PROP_SONAR_LOGIN));
     }
     sonarConnector =
         new SonarConnector(getLog(), sonarHostUrl, sonarLogin, sonarPassword, sonarProjectKey);
@@ -276,8 +282,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
         case IN_PROGRESS:
         case PENDING:
           try {
-            getLog().info(String
-                .format("Analysis in progress, next retry in %ds (attempts left: %d)",
+            getLog().info(
+                String.format("Analysis in progress, next retry in %ds (attempts left: %d)",
                     checkTaskIntervalS, attemptsLeft));
             Thread.sleep(TimeUnit.SECONDS.toMillis(checkTaskIntervalS));
           } catch (InterruptedException e) {
@@ -311,8 +317,8 @@ public class SonarQualityGateMojo extends AbstractMojo {
   protected Optional<String> findCeTaskId(String buildDir) throws MojoExecutionException {
     Path reportTaskPath = Path.of(buildDir, "sonar", "report-task.txt");
     if (!Files.exists(reportTaskPath)) {
-      getLog()
-          .info("no report file from previously sonar-maven-plugin run found: " + reportTaskPath);
+      getLog().info(
+          "no report file from previously sonar-maven-plugin run found: " + reportTaskPath);
       return Optional.empty();
     }
     String ceTaskId;
@@ -325,8 +331,9 @@ public class SonarQualityGateMojo extends AbstractMojo {
           String.format("Error parsing properties in: %s", reportTaskPath), e);
     }
     if (Util.isBlank(ceTaskId)) {
-      throw new MojoExecutionException(String
-          .format("Property '%s' not found in '%s'", REPORT_TASK_KEY_CE_TASK_ID, reportTaskPath));
+      throw new MojoExecutionException(
+          String.format("Property '%s' not found in '%s'", REPORT_TASK_KEY_CE_TASK_ID,
+              reportTaskPath));
     } else {
       return Optional.of(ceTaskId);
     }
