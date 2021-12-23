@@ -139,8 +139,8 @@ mvn -B release:clean
    `mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.2.0 -Dtag=v1.2.0`
 5. Create and publish binaries and documentation:
    `mvn -B release:perform -DreleaseProfiles=build-for-release`
-6. Create and push a tag for the site branch. Change into directory `target/site` and fire the according commands:
-   `git tag v1.2.0-site && git push origin v1.2.0-site`
+6. Create and push a tag for the site branch. Change into directory `./target/checkout/target/scmpublish-checkout` and
+   fire the according commands: `git tag v1.2.0-site && git push origin v1.2.0-site`
 7. Create new release on GitHub ([here](https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/releases/new))
    - choose tag: v1.2.0
    - set title: 1.2.0
