@@ -296,6 +296,12 @@
           <detail>true</detail>
           <requirements>
             <jdk>${maven.compiler.release}</jdk>
+            <others>
+              <property>
+                <name>SonarQube (by mode)</name>
+                <value>5.3+ (integrated) / 5.4+ (simple) / 7.7+ (advanced)</value>
+              </property>
+            </others>
           </requirements>
         </configuration>
       </plugin>

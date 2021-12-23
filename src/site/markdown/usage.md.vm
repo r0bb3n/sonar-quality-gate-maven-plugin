@@ -3,7 +3,7 @@
 * Java 11
     * see section [Why Java 11?](https://github.com/r0bb3n/sonar-quality-gate-maven-plugin#why-java-11) for details
 * SonarQube (depends on mode)
-    * integrated: 5.3+ 
+    * integrated: 5.3+
     * simple: 5.4+
     * advanced: 7.7+
 
