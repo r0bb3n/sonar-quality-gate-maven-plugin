@@ -7,13 +7,17 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+[unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.2.0...HEAD
+
+## [1.2.0]
+
 ### Added
 
 - add parameter `skip` to support skipping the execution via config ([#115])
 - add parameter `failOnMiss` to change failure behavior ([#118])
 - publish maven plugin documentation to [r0bb3n.github.com/sonar-quality-gate-maven-plugin](https://r0bb3n.github.com/sonar-quality-gate-maven-plugin) ([#117])
 
-[unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.1.0...HEAD
+[1.2.0]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.1.0...v1.2.0
 [#115]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/115
 [#118]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/118
 [#117]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/117
