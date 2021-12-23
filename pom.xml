@@ -101,11 +101,10 @@
             <phase>process-classes</phase>
           </execution>
           <execution>
-            <id>help-descriptor</id>
+            <id>generate-helpmojo</id>
             <goals>
               <goal>helpmojo</goal>
             </goals>
-            <phase>process-classes</phase>
             <configuration>
               <helpPackageName>org.r0bb3n.maven.generated</helpPackageName>
             </configuration>
