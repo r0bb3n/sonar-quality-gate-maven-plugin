@@ -10,7 +10,11 @@
   <description>The Sonar Quality Gate Maven Plugin checks the project status in SonarQube and fails
     the maven job when the Quality Gate is not passed.
   </description>
-  <url>https://github.com/r0bb3n/sonar-quality-gate-maven-plugin</url>
+  <url>https://r0bb3n.github.io/sonar-quality-gate-maven-plugin/</url>
+  <prerequisites>
+    <maven>3</maven>
+  </prerequisites>
+  <inceptionYear>2020</inceptionYear>
 
   <licenses>
     <license>
@@ -25,6 +29,9 @@
     <developer>
       <name>r0bb3n</name>
       <url>https://github.com/r0bb3n</url>
+      <roles>
+        <role>owner</role>
+      </roles>
     </developer>
   </developers>
 
@@ -55,10 +62,15 @@
       <id>ossrh</id>
       <url>${nexusUrl}/service/local/staging/deploy/maven2/</url>
     </repository>
+    <site>
+      <id>github-pages</id>
+      <url>scm:git:git@github.com:r0bb3n/sonar-quality-gate-maven-plugin.git</url>
+    </site>
   </distributionManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.release>11</maven.compiler.release>
 
     <nexusUrl>https://oss.sonatype.org</nexusUrl>
@@ -89,11 +101,10 @@
             <phase>process-classes</phase>
           </execution>
           <execution>
-            <id>help-descriptor</id>
+            <id>generate-helpmojo</id>
             <goals>
               <goal>helpmojo</goal>
             </goals>
-            <phase>process-classes</phase>
             <configuration>
               <helpPackageName>org.r0bb3n.maven.generated</helpPackageName>
             </configuration>
@@ -142,6 +153,13 @@
         <configuration>
           <tagNameFormat>v@{project.version}</tagNameFormat>
           <releaseProfiles>build-for-release</releaseProfiles>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <skipDeploy>true</skipDeploy>
         </configuration>
       </plugin>
     </plugins>
@@ -242,9 +260,52 @@
           <artifactId>maven-site-plugin</artifactId>
           <version>3.9.1</version>
         </plugin>
+        <plugin>
+          <artifactId>maven-scm-publish-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>3.1.2</version>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>index</report>
+              <report>scm</report>
+              <report>ci-management</report>
+              <report>issue-management</report>
+              <report>team</report>
+              <report>licenses</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <configuration>
+          <detail>true</detail>
+          <requirements>
+            <jdk>${maven.compiler.release}</jdk>
+            <others>
+              <property>
+                <name>SonarQube (by mode)</name>
+                <value>5.3+ (integrated) / 5.4+ (simple) / 7.7+ (advanced)</value>
+              </property>
+            </others>
+          </requirements>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
 
   <profiles>
     <profile>
@@ -294,6 +355,25 @@
                     <arg>--pinentry-mode</arg>
                     <arg>loopback</arg>
                   </gpgArguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <artifactId>maven-scm-publish-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>publish-site-to-github-branch</id>
+                <phase>site-deploy</phase>
+                <goals>
+                  <goal>publish-scm</goal>
+                </goals>
+                <configuration>
+                  <content>${project.reporting.outputDirectory}</content>
+                  <siteOutputEncoding>${project.reporting.outputEncoding}</siteOutputEncoding>
+                  <scmBranch>gh-pages</scmBranch>
+                  <serverId>github-pages</serverId>
                 </configuration>
               </execution>
             </executions>

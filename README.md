@@ -27,8 +27,7 @@ There a three modes supported:
 
 ## Usage
 
-Include the plugin declaration in your `pom.xml` either in `<build><pluginManagement><plugins>` for
-calling it only explicitly on CLI or in `<build><plugins>` to integrate it automatically in your build.  
+Include the plugin declaration in your `pom.xml`
 
 ```xml
 <plugin>
@@ -38,50 +37,15 @@ calling it only explicitly on CLI or in `<build><plugins>` to integrate it autom
 </plugin>
 ```
 
-You can also use it without changing your `pom.xml` by calling it fully qualified on CLI:
-
-```
-mvn io.github.r0bb3n:sonar-quality-gate-maven-plugin:1.1.0:check
-```
-
-**Integrated mode**
+and execute the following command:
 
 ```
 mvn sonar:sonar sonar-quality-gate:check
 ```
 
-**Simple mode**
-
-```
-mvn sonar-quality-gate:check
-```
-Ensure that there is no (old) metadata inside `target` from a former sonar-maven-plugin run 
-(especially `target/sonar/report-task.txt`) otherwise it will switch automatically to **integrated** mode.
-
-**Advanced mode**
-
-```
-mvn sonar-quality-gate:check -Dsonar-quality-gate.branch=develop
-```
-
-### Plugin parameters
-
-| Parameter                                 | Description                                                                                                                                                                                     | Used in mode     |
-|-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------|
-| `sonar.host.url`                          | sonar host url (aligned to [sonar-maven-plugin analysis parameters][sonar-analysis-param])                                                                                                      | _all_            |
-| `sonar.login`                             | sonar login (username or token) for basic auth (aligned to [sonar-maven-plugin analysis parameters][sonar-analysis-param])<br>see also [SonarQube - Web API Authentication][sonar-web-api-auth] | _all_            |
-| `sonar.password`                          | sonar password for basic auth (aligned to [sonar-maven-plugin analysis parameters][sonar-analysis-param])<br>see also [SonarQube - Web API Authentication][sonar-web-api-auth]                  | _all_            |
-| `sonar.projectKey`                        | project key used in sonar for this project (aligned to [sonar-maven-plugin analysis parameters][sonar-analysis-param])<br>(default: `${project.groupId}:${project.artifactId}`)                 | simple, advanced |
-| `sonar-quality-gate.skip`                 | skip plugin execution<br>(default: `false`)                                                                                                                                                     | _all_            |
-| `sonar-quality-gate.failOnMiss`           | fail the execution when the quality gate was not passed (status is not `OK`)<br>(default: `true`)                                                                                               | _all_            |
-| `sonar-quality-gate.branch`               | name of the branch to check the quality gate in sonar                                                                                                                                           | advanced         |
-| `sonar-quality-gate.pullRequest`          | name of the pull request to check the quality gate in sonar                                                                                                                                     | advanced         |
-| `sonar-quality-gate.checkTask.attempts`   | How often try to retrieve the analysis id from the task details in sonar until stopping the job<br>(default: `10`)                                                                              | integrated       |
-| `sonar-quality-gate.checkTask.interval.s` | How many seconds to wait between two requests when retrieving task details<br>(default: `5`)                                                                                                    | integrated       |
-
-[sonar-analysis-param]: https://docs.sonarqube.org/latest/analysis/analysis-parameters/
-
-[sonar-web-api-auth]: https://docs.sonarqube.org/latest/extend/web-api/
+For **full reference** of the modes and parameters, please check the [Usage](https://r0bb3n.github.io/sonar-quality-gate-maven-plugin/usage.html)
+and [Goals](https://r0bb3n.github.io/sonar-quality-gate-maven-plugin/plugin-info.html) page in the
+[sonar-quality-gate-maven-plugin documentation](https://r0bb3n.github.io/sonar-quality-gate-maven-plugin/).
 
 ## Internals
 
@@ -148,10 +112,11 @@ This endpoint is used to retrieve the analysis id of a prior sonar-maven-plugin 
 mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=<release version> -Dtag=v<release version>
 ```
 
-**_perform_** - checkout version tag, create binaries and deploy via oss.sonatype.org to Maven Central
+**_perform_** - checkout version tag, create binaries and deploy via oss.sonatype.org to Maven Central and create
+documentation ("site") and push to `gh-pages` branch.
 
 ```
-mvn -B release:perform
+mvn -B release:perform -DreleaseProfiles=build-for-release
 ```
 
 **_clean_** - remove backup/work file (useful if you ran prepare but not perform)
@@ -162,20 +127,26 @@ mvn -B release:clean
 
 ### How-To release
 
+0. Ensure the right git configs (username, email, signing stuff, ...) are set on `--global` level (correct `.gitconfig`
+   file in user home) - config done on level `--local` is not respected by additional steps that take place in 
+   subdirectories of `target` with fresh full-checkouts of the repo (e.g. commits/push during `site-deploy` via
+   `maven-scm-publish-plugin`).
 1. Update `CHANGELOG.md`: add a section for the upcoming version and move all "unpublished" changes to it
 2. Update `README.md`: replace all occurrences of previous version number with upcoming version
-3. persist:
+3. Persist:
    `git add CHANGELOG.md README.md && git commit -m "prepare for release: update CHANGELOG.md/README.md" && git push`
-4. create release in git repo:
+4. Create release in git repo:
    `mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.1.0 -Dtag=v1.1.0`
-5. create and publish binaries:
+5. Create and publish binaries and documentation:
    `mvn -B release:perform -DreleaseProfiles=build-for-release`
-6. Create new release on GitHub ([here](https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/releases/new))
+6. Create and push a tag for the site branch. Change into directory `target/site` and fire the according commands:
+   `git tag v1.1.0-site && git push origin v1.1.0-site`
+7. Create new release on GitHub ([here](https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/releases/new))
    - choose tag: v1.1.0
    - set title: 1.1.0
    - copy the `CHANGELOG.md` content of the released version
    - upload the files `./target/checkout/target/*.(pom|jar|asc)`
-7. publish [staging repository of oss nexus repository](https://oss.sonatype.org/#stagingRepositories)
+8. publish [staging repository of oss nexus repository](https://oss.sonatype.org/#stagingRepositories)
    (login required) to maven
    central ([overview doc](https://central.sonatype.org/pages/ossrh-guide.html#releasing-to-central)
    / [detailed doc](https://central.sonatype.org/pages/releasing-the-deployment.html))

@@ -1,0 +1,11 @@
+# Sonar Quality Gate Maven Plugin
+
+Check your SonarQube project if it passes its quality gate. If it doesn't, the plugin can fail the maven job.
+
+There are three modes supported:
+
+| Mode                         | Description                                                                                                                                                                                           |
+|------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **integrated** (recommended) | Run in conjunction with sonar-maven-plugin (supports branches and pull requests)<br/>The required information for fetching the data will be read from a sonar-maven-plugin generated file in `target` |
+| **simple**                   | Run stand-alone for a simple SonarQube project (no branches)                                                                                                                                          |
+| **advanced**                 | Run stand-alone for a SonarQube project with branch name or pull request                                                                                                                              |
