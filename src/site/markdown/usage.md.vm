@@ -1,0 +1,61 @@
+#[[##]]# Prerequisites
+
+* Java 11
+    * see section [Why Java 11?](https://github.com/r0bb3n/sonar-quality-gate-maven-plugin#why-java-11) for details
+* SonarQube (depends on mode)
+    * integrated: 5.3+ 
+    * simple: 5.4+
+    * advanced: 7.7+
+
+#[[##]]# Usage
+
+Include the plugin declaration in your `pom.xml` either in `<build><pluginManagement><plugins>` for
+calling it only explicitly on CLI or in `<build><plugins>` to integrate it automatically in your build.  
+
+```xml
+<plugin>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>${project.artifactId}</artifactId>
+  <version>${project.version}</version>
+</plugin>
+```
+
+You can also use it without changing your `pom.xml` by calling it fully qualified on CLI:
+
+```
+mvn ${project.groupId}:${project.artifactId}:${project.version}:check
+```
+#[[###]]# Modes
+
+#[[####]]# Integrated mode
+
+Run in conjunction with sonar-maven-plugin (supports branches and pull requests)<br/>The required information for fetching the data will be read from a sonar-maven-plugin generated file in `target`.
+
+```
+mvn sonar:sonar sonar-quality-gate:check
+```
+
+#[[####]]# Simple mode
+
+Run stand-alone for a simple SonarQube project (no branches).
+
+```
+mvn sonar-quality-gate:check
+```
+
+Ensure that there is no (old) metadata inside `target` from a former sonar-maven-plugin run 
+(especially `target/sonar/report-task.txt`) otherwise it will switch automatically to **integrated** mode.
+
+#[[####]]# Advanced mode
+
+Run stand-alone for a SonarQube project with branch name ...
+
+```
+mvn sonar-quality-gate:check -Dsonar-quality-gate.branch=develop
+```
+
+... or pull request.
+
+```
+mvn sonar-quality-gate:check -Dsonar-quality-gate.pullRequest=59
+```

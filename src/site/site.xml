@@ -14,7 +14,7 @@
       <gitHub>
         <projectId>r0bb3n/sonar-quality-gate-maven-plugin</projectId>
         <ribbonOrientation>right</ribbonOrientation>
-<!--        <ribbonColor>black</ribbonColor>-->
+        <ribbonColor>orange</ribbonColor>
       </gitHub>
     </fluidoSkin>
   </custom>
@@ -23,7 +23,7 @@
     <menu name="Overview">
       <item name="Introduction" href="index.html"/>
       <item name="Goals" href="plugin-info.html"/>
-      <!--      <item name="Usage" href="usage.html"/>-->
+      <item name="Usage" href="usage.html"/>
       <!--      <item name="FAQ" href="faq.html"/>-->
     </menu>
     <menu ref="reports"/>
