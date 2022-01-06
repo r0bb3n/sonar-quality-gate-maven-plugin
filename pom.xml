@@ -153,6 +153,7 @@
         <configuration>
           <tagNameFormat>v@{project.version}</tagNameFormat>
           <releaseProfiles>build-for-release</releaseProfiles>
+          <signTag>true</signTag>
         </configuration>
       </plugin>
 
