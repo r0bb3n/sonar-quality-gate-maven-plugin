@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd
+                      https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+  <suppress>
+    <notes><![CDATA[
+      file name: maven-model-3.8.5.jar
+      description: CVE is referencing a RUST module
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.maven/maven\-model@.*$</packageUrl>
+    <cve>CVE-2020-36460</cve>
+  </suppress>
+</suppressions>
