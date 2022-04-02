@@ -4,7 +4,7 @@ name: OWASP Dependency Checker
 
 on:
   schedule:
-    - cron: '27 5 * * 5'
+    - cron: '27 5 * * 1,5'
 
 jobs:
   check-master:
