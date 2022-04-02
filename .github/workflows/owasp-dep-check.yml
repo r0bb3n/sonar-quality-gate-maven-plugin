@@ -43,6 +43,7 @@ jobs:
           mvn --file pom.xml --batch-mode \
             dependency-check:check -P vuln-check
       - name: Upload dependency report for master branch
+        if: ${{ always() }}
         uses: actions/upload-artifact@v1.0.0
         with:
           name: dep-report-master
@@ -95,6 +96,7 @@ jobs:
           mvn --file pom.xml --batch-mode \
             dependency-check:check -P vuln-check
       - name: Upload dependency report for latest tag
+        if: ${{ always() }}
         uses: actions/upload-artifact@v1.0.0
         with:
           name: dep-report-latest
