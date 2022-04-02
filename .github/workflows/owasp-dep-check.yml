@@ -19,25 +19,21 @@ jobs:
         with:
           ref: master
       # http://man7.org/linux/man-pages/man1/date.1.html
-      - name: Get Year
-        id: get-year
+      - name: Get Now
+        id: get-now
         run: |
           echo "::set-output name=year::$(/bin/date -u "+%Y")"
-        shell: bash
-      - name: Get Month
-        id: get-month
-        run: |
           echo "::set-output name=month::$(/bin/date -u "+%m")"
+          echo "::set-output name=day::$(/bin/date -u "+%d")"
         shell: bash
       - name: Cache local Maven repository
         uses: actions/cache@v2
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-owasp-${{ steps.get-year.outputs.year }}-${{ steps.get-month.outputs.month }}-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-maven-owasp-master-${{ steps.get-now.outputs.year }}-${{ steps.get-now.outputs.month }}-${{ steps.get-now.outputs.day }}
           restore-keys: |
-            ${{ runner.os }}-maven-owasp-${{ steps.get-year.outputs.year }}-${{ steps.get-month.outputs.month }}-
-            ${{ runner.os }}-maven-owasp-${{ steps.get-year.outputs.year }}-
-            ${{ runner.os }}-maven-owasp-
+            ${{ runner.os }}-maven-owasp-master-${{ steps.get-now.outputs.year }}-${{ steps.get-now.outputs.month }}-
+            ${{ runner.os }}-maven-owasp-master-${{ steps.get-now.outputs.year }}-
       - name: Run OWASP Dependency Checker for `master`
         run: |
           mvn --file pom.xml --batch-mode \
@@ -60,25 +56,20 @@ jobs:
         with:
           ref: latest
       # http://man7.org/linux/man-pages/man1/date.1.html
-      - name: Get Year
-        id: get-year
+      - name: Get Now
+        id: get-now
         run: |
           echo "::set-output name=year::$(/bin/date -u "+%Y")"
-        shell: bash
-      - name: Get Month
-        id: get-month
-        run: |
           echo "::set-output name=month::$(/bin/date -u "+%m")"
-        shell: bash
+          echo "::set-output name=day::$(/bin/date -u "+%d")"
       - name: Cache local Maven repository
         uses: actions/cache@v2
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-owasp-${{ steps.get-year.outputs.year }}-${{ steps.get-month.outputs.month }}-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-maven-owasp-latest-${{ steps.get-now.outputs.year }}-${{ steps.get-now.outputs.month }}-${{ steps.get-now.outputs.day }}
           restore-keys: |
-            ${{ runner.os }}-maven-owasp-${{ steps.get-year.outputs.year }}-${{ steps.get-month.outputs.month }}-
-            ${{ runner.os }}-maven-owasp-${{ steps.get-year.outputs.year }}-
-            ${{ runner.os }}-maven-owasp-
+            ${{ runner.os }}-maven-owasp-latest-${{ steps.get-now.outputs.year }}-${{ steps.get-now.outputs.month }}-
+            ${{ runner.os }}-maven-owasp-latest-${{ steps.get-now.outputs.year }}-
       - name: Run OWASP Dependency Checker for `latest`
         # don't run for version 1.0.2 since it has no proper profile
         env:
