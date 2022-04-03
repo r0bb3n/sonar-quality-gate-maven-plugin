@@ -7,11 +7,15 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+[unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.2.1...HEAD
+
+## [1.2.1]
+
 ### Security
 
 - update jackson-databind to fix [CVE-2020-36518] ([#203])
 
-[unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.2.0...HEAD
+[1.2.1]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.2.0...v1.2.1
 [CVE-2020-36518]: https://nvd.nist.gov/vuln/detail/CVE-2020-36518
 [#203]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/203
 
