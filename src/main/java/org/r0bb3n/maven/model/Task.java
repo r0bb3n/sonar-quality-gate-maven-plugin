@@ -33,6 +33,9 @@ public class Task {
   String analysisId;
   Status status;
 
+  /**
+   * All available states for a task
+   */
   @RequiredArgsConstructor
   @Getter
   public enum Status {

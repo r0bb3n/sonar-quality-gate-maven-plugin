@@ -42,6 +42,9 @@ import org.r0bb3n.maven.model.ProjectStatusContainer;
 import org.r0bb3n.maven.model.Task;
 import org.r0bb3n.maven.model.TaskContainer;
 
+/**
+ * Connector to consume Sonar REST API
+ */
 public class SonarConnector {
 
   private static final String SONAR_WEB_API_PATH_PROJECT_STATUS = "api/qualitygates/project_status";
@@ -72,6 +75,7 @@ public class SonarConnector {
 
   /**
    * Create sonar connector
+   *
    * @param log Logger to use
    * @param sonarHostUrl host url of sonar
    * @param sonarLogin optional sonar login name or token
@@ -205,6 +209,7 @@ public class SonarConnector {
 
   /**
    * Create and configure (add authorization, if provided) request builder
+   *
    * @param sonarLogin login name or token
    * @param sonarPassword password for login name
    */

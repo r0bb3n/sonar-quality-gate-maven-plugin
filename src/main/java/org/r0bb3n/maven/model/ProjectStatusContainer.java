@@ -18,6 +18,9 @@ package org.r0bb3n.maven.model;
 
 import lombok.Data;
 
+/**
+ * Container class for {@link ProjectStatus}
+ */
 @Data
 public class ProjectStatusContainer implements Container<ProjectStatus> {
 
