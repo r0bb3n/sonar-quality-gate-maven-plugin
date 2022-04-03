@@ -4,7 +4,7 @@
   <groupId>io.github.r0bb3n</groupId>
   <artifactId>sonar-quality-gate-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>1-SNAPSHOT</version>
+  <version>1.2.1</version>
 
   <name>Sonar Quality Gate Maven Plugin</name>
   <description>The Sonar Quality Gate Maven Plugin checks the project status in SonarQube and fails
@@ -40,7 +40,7 @@
     <connection>scm:git:git@github.com:r0bb3n/sonar-quality-gate-maven-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:r0bb3n/sonar-quality-gate-maven-plugin.git
     </developerConnection>
-    <tag>HEAD</tag>
+    <tag>v1.2.1</tag>
   </scm>
 
   <issueManagement>
