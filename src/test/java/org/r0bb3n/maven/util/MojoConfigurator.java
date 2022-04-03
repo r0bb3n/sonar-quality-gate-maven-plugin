@@ -124,9 +124,9 @@ public class MojoConfigurator {
       }
     }
     if (field == null) {
-      throw new NoSuchFieldException(String
-          .format("Field '%s' could not be found in class '%s' and its super classes", fieldName,
-              mojo.getClass()));
+      throw new NoSuchFieldException(
+          String.format("Field '%s' could not be found in class '%s' and its super classes",
+              fieldName, mojo.getClass()));
     }
     field.setAccessible(true);
     field.set(mojo, value);

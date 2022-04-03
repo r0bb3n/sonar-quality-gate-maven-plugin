@@ -39,9 +39,9 @@ public class DeserializationTest {
 
   @Test
   public void readProjectStatusJson() throws Exception {
-    ProjectStatusContainer container = objectMapper
-        .readValue(DeserializationTest.class.getResource("project_status-response-valid.json"),
-            ProjectStatusContainer.class);
+    ProjectStatusContainer container = objectMapper.readValue(
+        DeserializationTest.class.getResource("project_status-response-valid.json"),
+        ProjectStatusContainer.class);
     assertNotNull("no Container", container);
     assertSame("Container not right implemented", container.getProjectStatus(),
         container.getContent());
@@ -51,8 +51,8 @@ public class DeserializationTest {
 
   @Test
   public void readTaskJson() throws Exception {
-    TaskContainer container = objectMapper
-        .readValue(DeserializationTest.class.getResource("task-response-valid.json"),
+    TaskContainer container =
+        objectMapper.readValue(DeserializationTest.class.getResource("task-response-valid.json"),
             TaskContainer.class);
 
     assertNotNull("no Container", container);

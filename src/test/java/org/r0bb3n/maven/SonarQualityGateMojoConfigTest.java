@@ -61,8 +61,8 @@ public class SonarQualityGateMojoConfigTest {
 
     MojoExecutionException exc =
         Assert.assertThrows(MojoExecutionException.class, underTest::execute);
-    MatcherAssert.assertThat(exc, ExceptionMatchers
-        .hasMessageThat(Matchers.matchesRegex("you cannot specify '.*' without '.*'")));
+    MatcherAssert.assertThat(exc, ExceptionMatchers.hasMessageThat(
+        Matchers.matchesRegex("you cannot specify '.*' without '.*'")));
   }
 
   @Test

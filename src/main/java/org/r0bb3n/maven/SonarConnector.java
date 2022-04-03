@@ -199,8 +199,8 @@ public class SonarConnector {
           String.format("Response from Sonar (HTTP Status: %d):%n%s", response.statusCode(), json));
     }
     if (response.statusCode() != HttpURLConnection.HTTP_OK) {
-      throw new IOException(String
-          .format("Bad status code '%d' returned from '%s' - Body: %s", response.statusCode(),
+      throw new IOException(
+          String.format("Bad status code '%d' returned from '%s' - Body: %s", response.statusCode(),
               resourceUri, json));
     } else {
       return json;
@@ -278,8 +278,8 @@ public class SonarConnector {
    * @return URL-ready query parameter
    */
   private String toQueryEntry(Map.Entry<String, String> entry) {
-    return URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8) + "=" + URLEncoder
-        .encode(entry.getValue(), StandardCharsets.UTF_8);
+    return URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8) + "=" + URLEncoder.encode(
+        entry.getValue(), StandardCharsets.UTF_8);
   }
 
 }
