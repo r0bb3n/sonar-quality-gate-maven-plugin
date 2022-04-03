@@ -18,6 +18,9 @@ package org.r0bb3n.maven.model;
 
 import lombok.Data;
 
+/**
+ * Container class for {@link Task}
+ */
 @Data
 public class TaskContainer implements Container<Task> {
 

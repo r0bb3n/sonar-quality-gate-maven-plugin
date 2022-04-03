@@ -18,6 +18,11 @@ package org.r0bb3n.maven.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * Generic wrapper interface of several model classes
+ *
+ * @param <T> type of content
+ */
 public interface Container<T> {
 
   @JsonIgnore

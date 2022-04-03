@@ -31,6 +31,9 @@ public class ProjectStatus {
   private boolean ignoredConditions;
   private List<Condition> conditions;
 
+  /**
+   * All available states for a project
+   */
   public enum Status {
     OK,
     WARN,

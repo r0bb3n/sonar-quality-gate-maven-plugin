@@ -72,7 +72,7 @@ public class SonarQualityGateMojoExecuteTest {
   @Test
   public void mojoExecuteWithTwoTaskCallsAndOneAnalysisCallOk() throws Exception {
     Mockito.doAnswer(
-        invocation -> Optional.of("mojoExecuteWithTwoTaskCallsAndOneAnalysisCallOk_taskId"))
+            invocation -> Optional.of("mojoExecuteWithTwoTaskCallsAndOneAnalysisCallOk_taskId"))
         .when(underTestSpy).findCeTaskId(Mockito.any());
 
     underTestSpy.execute();
@@ -86,7 +86,7 @@ public class SonarQualityGateMojoExecuteTest {
   public void mojoExecuteWithAbortAfterOneTaskCall() throws Exception {
     MojoConfigurator.configure(underTestSpy).setCheckTaskAttempts(1);
     Mockito.doAnswer(
-        invocation -> Optional.of("mojoExecuteWithTwoTaskCallsAndOneAnalysisCallOk_taskId"))
+            invocation -> Optional.of("mojoExecuteWithTwoTaskCallsAndOneAnalysisCallOk_taskId"))
         .when(underTestSpy).findCeTaskId(Mockito.any());
 
     MojoExecutionException exc =
@@ -98,7 +98,7 @@ public class SonarQualityGateMojoExecuteTest {
   @Test
   public void mojoExecuteWithOneTaskCallAndOneAnalysisCallError() throws Exception {
     Mockito.doAnswer(
-        invocation -> Optional.of("mojoExecuteWithOneTaskCallAndOneAnalysisCallError_taskId"))
+            invocation -> Optional.of("mojoExecuteWithOneTaskCallAndOneAnalysisCallError_taskId"))
         .when(underTestSpy).findCeTaskId(Mockito.any());
 
     MojoFailureException exc =
@@ -139,8 +139,8 @@ public class SonarQualityGateMojoExecuteTest {
 
     MojoFailureException exc =
         Assert.assertThrows(MojoFailureException.class, underTestSpy::execute);
-    MatcherAssert.assertThat(exc, ExceptionMatchers
-        .hasMessageThat(Matchers.startsWith("Quality Gate not passed (status: NONE)!")));
+    MatcherAssert.assertThat(exc, ExceptionMatchers.hasMessageThat(
+        Matchers.startsWith("Quality Gate not passed (status: NONE)!")));
 
     Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any());
   }
@@ -152,8 +152,8 @@ public class SonarQualityGateMojoExecuteTest {
 
     MojoFailureException exc =
         Assert.assertThrows(MojoFailureException.class, underTestSpy::execute);
-    MatcherAssert.assertThat(exc, ExceptionMatchers
-        .hasMessageThat(Matchers.startsWith("Quality Gate not passed (status: WARN)!")));
+    MatcherAssert.assertThat(exc, ExceptionMatchers.hasMessageThat(
+        Matchers.startsWith("Quality Gate not passed (status: WARN)!")));
 
     Mockito.verify(underTestSpy, Mockito.never()).retrieveAnalysisId(Mockito.any());
   }

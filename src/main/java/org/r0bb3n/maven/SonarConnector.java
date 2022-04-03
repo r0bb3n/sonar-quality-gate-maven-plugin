@@ -42,6 +42,9 @@ import org.r0bb3n.maven.model.ProjectStatusContainer;
 import org.r0bb3n.maven.model.Task;
 import org.r0bb3n.maven.model.TaskContainer;
 
+/**
+ * Connector to consume Sonar REST API
+ */
 public class SonarConnector {
 
   private static final String SONAR_WEB_API_PATH_PROJECT_STATUS = "api/qualitygates/project_status";
@@ -72,6 +75,7 @@ public class SonarConnector {
 
   /**
    * Create sonar connector
+   *
    * @param log Logger to use
    * @param sonarHostUrl host url of sonar
    * @param sonarLogin optional sonar login name or token
@@ -195,8 +199,8 @@ public class SonarConnector {
           String.format("Response from Sonar (HTTP Status: %d):%n%s", response.statusCode(), json));
     }
     if (response.statusCode() != HttpURLConnection.HTTP_OK) {
-      throw new IOException(String
-          .format("Bad status code '%d' returned from '%s' - Body: %s", response.statusCode(),
+      throw new IOException(
+          String.format("Bad status code '%d' returned from '%s' - Body: %s", response.statusCode(),
               resourceUri, json));
     } else {
       return json;
@@ -205,6 +209,7 @@ public class SonarConnector {
 
   /**
    * Create and configure (add authorization, if provided) request builder
+   *
    * @param sonarLogin login name or token
    * @param sonarPassword password for login name
    */
@@ -273,8 +278,8 @@ public class SonarConnector {
    * @return URL-ready query parameter
    */
   private String toQueryEntry(Map.Entry<String, String> entry) {
-    return URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8) + "=" + URLEncoder
-        .encode(entry.getValue(), StandardCharsets.UTF_8);
+    return URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8) + "=" + URLEncoder.encode(
+        entry.getValue(), StandardCharsets.UTF_8);
   }
 
 }

@@ -27,6 +27,7 @@ public class Util {
 
   /**
    * Check if null or {@link String#isBlank()}
+   *
    * @param s to check
    * @return true if no content, otherwise false
    */

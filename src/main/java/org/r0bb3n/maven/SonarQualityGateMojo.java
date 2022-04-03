@@ -206,6 +206,7 @@ public class SonarQualityGateMojo extends AbstractMojo {
 
   /**
    * Read config parameters and create the {@link #sonarConnector}
+   *
    * @throws MojoExecutionException in case of invalid config parameters
    */
   protected void setupSonarConnector() throws MojoExecutionException {
