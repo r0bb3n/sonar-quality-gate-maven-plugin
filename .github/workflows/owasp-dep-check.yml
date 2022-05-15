@@ -27,7 +27,7 @@ jobs:
           echo "::set-output name=day::$(/bin/date -u "+%d")"
         shell: bash
       - name: Cache local Maven repository
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-owasp-master-${{ steps.get-now.outputs.year }}-${{ steps.get-now.outputs.month }}-${{ steps.get-now.outputs.day }}
@@ -63,7 +63,7 @@ jobs:
           echo "::set-output name=month::$(/bin/date -u "+%m")"
           echo "::set-output name=day::$(/bin/date -u "+%d")"
       - name: Cache local Maven repository
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-owasp-latest-${{ steps.get-now.outputs.year }}-${{ steps.get-now.outputs.month }}-${{ steps.get-now.outputs.day }}

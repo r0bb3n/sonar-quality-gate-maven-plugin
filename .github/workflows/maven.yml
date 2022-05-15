@@ -51,7 +51,7 @@ jobs:
             core.setOutput('PULL_REQUEST_TARGET_BRANCH_NAME', context.payload.pull_request.base.ref);
             core.setOutput('PULL_REQUEST_NUMBER', context.payload.number.toString());
       - name: Cache local Maven repository
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.m2/repository
@@ -64,7 +64,7 @@ jobs:
           mvn --file pom.xml --batch-mode \
             install -P ci-run
       - name: Cache Sonar Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.sonar/cache
