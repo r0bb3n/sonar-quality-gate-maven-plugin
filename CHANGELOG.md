@@ -7,7 +7,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- support environment variable `SONAR_TOKEN` as alternative to the property `sonar.login` ([#243])
+
 [unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.2.1...HEAD
+[#243]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/243
 
 ## [1.2.1]
 

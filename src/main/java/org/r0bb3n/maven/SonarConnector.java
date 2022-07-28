@@ -78,16 +78,16 @@ public class SonarConnector {
    *
    * @param log Logger to use
    * @param sonarHostUrl host url of sonar
-   * @param sonarLogin optional sonar login name or token
-   * @param sonarPassword optional password for sonar login name
    * @param sonarProjectKey project key used inside sonar
+   * @param sonarLoginOrToken optional sonar login name or token
+   * @param sonarPassword optional password for sonar login name
    */
-  public SonarConnector(Log log, URL sonarHostUrl, String sonarLogin, String sonarPassword,
-      String sonarProjectKey) {
+  public SonarConnector(Log log, URL sonarHostUrl, String sonarProjectKey, String sonarLoginOrToken,
+      String sonarPassword) {
     this.log = log;
     this.sonarHostUrl = sonarHostUrl;
     this.sonarProjectKey = sonarProjectKey;
-    this.requestBuilderTemplate = createRequestBuilder(sonarLogin, sonarPassword);
+    this.requestBuilderTemplate = createRequestBuilder(sonarLoginOrToken, sonarPassword);
   }
 
   /**

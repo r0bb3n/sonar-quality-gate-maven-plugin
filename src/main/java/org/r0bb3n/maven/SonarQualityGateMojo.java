@@ -46,6 +46,7 @@ public class SonarQualityGateMojo extends AbstractMojo {
   private static final String PROP_SONAR_LOGIN = "sonar.login";
   private static final String PROP_SONAR_PASSWORD = "sonar.password";
   private static final String PROP_SONAR_HOST_URL = "sonar.host.url";
+  private static final String ENV_SONAR_TOKEN = "SONAR_TOKEN";
 
   private static final String REPORT_TASK_KEY_CE_TASK_ID = "ceTaskId";
 
@@ -210,13 +211,37 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * @throws MojoExecutionException in case of invalid config parameters
    */
   protected void setupSonarConnector() throws MojoExecutionException {
-    if (Util.isBlank(sonarLogin) && !Util.isBlank(sonarPassword)) {
-      throw new MojoExecutionException(
-          String.format("you cannot specify '%s' without '%s'", PROP_SONAR_PASSWORD,
-              PROP_SONAR_LOGIN));
+    if (!Util.isBlank(sonarPassword)) {
+      // username+password auth
+      if (Util.isBlank(sonarLogin)) {
+        throw new MojoExecutionException(
+            String.format("you cannot specify '%s' without '%s'", PROP_SONAR_PASSWORD,
+                PROP_SONAR_LOGIN));
+      } else {
+        getLog().debug("sonar auth: username + password");
+        sonarConnector =
+            new SonarConnector(getLog(), sonarHostUrl, sonarProjectKey, sonarLogin, sonarPassword);
+      }
+    } else {
+      // token auth
+      if (!Util.isBlank(sonarLogin)) {
+        getLog().debug("sonar auth: token (by property '" + PROP_SONAR_LOGIN + "')");
+        sonarConnector =
+            new SonarConnector(getLog(), sonarHostUrl, sonarProjectKey, sonarLogin, null);
+      } else {
+        // check environment variable SONAR_TOKEN as alternative source for the token
+        String env = System.getenv(ENV_SONAR_TOKEN);
+        if (!Util.isBlank(env)) {
+          getLog().debug("sonar auth: token (by environment variable '" + ENV_SONAR_TOKEN + "')");
+          sonarConnector = new SonarConnector(getLog(), sonarHostUrl, sonarProjectKey, env, null);
+        }
+      }
     }
-    sonarConnector =
-        new SonarConnector(getLog(), sonarHostUrl, sonarLogin, sonarPassword, sonarProjectKey);
+    if (sonarConnector == null) {
+      // no auth
+      getLog().debug("sonar auth: none");
+      sonarConnector = new SonarConnector(getLog(), sonarHostUrl, sonarProjectKey, null, null);
+    }
   }
 
   /**
