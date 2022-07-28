@@ -76,37 +76,37 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         working-directory: ./src/test/projects/simple
-        run: |
-          mvn --file pom.xml --batch-mode \
-            sonar:sonar sonar-quality-gate:check
-      - name: Run multi-module test project analysis
-        if: github.event_name == 'pull_request'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: ./src/test/projects/multi-module
         run: |
           mvn --file pom.xml --batch-mode \
             sonar:sonar sonar-quality-gate:check \
             -Dsonar.login=${{ secrets.SONARCLOUD_TOKEN }}
+      - name: Run multi-module test project analysis
+        if: github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+        working-directory: ./src/test/projects/multi-module
+        run: |
+          mvn --file pom.xml --batch-mode \
+            sonar:sonar sonar-quality-gate:check
       - name: Sonar Analysis with Maven (sonarcloud.io) - Branch
         if: github.event_name == 'push'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         run: |
           mvn --file pom.xml --batch-mode \
             sonar:sonar \
-            -Dsonar.login=${{ secrets.SONARCLOUD_TOKEN }} \
             -Dsonar.branch.name=${{ steps.push-branch-name.outputs.PUSH_BRANCH_NAME }}
       - name: Sonar Analysis with Maven (sonarcloud.io) - Pull Request
         if: github.event_name == 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         run: |
           mvn --file pom.xml --batch-mode \
             sonar:sonar \
-            -Dsonar.login=${{ secrets.SONARCLOUD_TOKEN }} \
             -Dsonar.pullrequest.branch=${{ steps.pull-request-name.outputs.PULL_REQUEST_SOURCE_BRANCH_NAME }} \
             -Dsonar.pullrequest.base=${{ steps.pull-request-name.outputs.PULL_REQUEST_TARGET_BRANCH_NAME }} \
             -Dsonar.pullrequest.key=${{ steps.pull-request-name.outputs.PULL_REQUEST_NUMBER }}
