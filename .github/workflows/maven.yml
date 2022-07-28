@@ -76,11 +76,11 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         working-directory: ./src/test/projects/simple
         run: |
           mvn --file pom.xml --batch-mode \
-            sonar:sonar sonar-quality-gate:check \
-            -Dsonar.login=${{ secrets.SONARCLOUD_TOKEN }}
+            sonar:sonar sonar-quality-gate:check
       - name: Run multi-module test project analysis
         if: github.event_name == 'pull_request'
         env:

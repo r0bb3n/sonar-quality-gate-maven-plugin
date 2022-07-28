@@ -77,7 +77,7 @@ public class SonarConnectorProjectStatusTest {
   public void setUp() throws Exception {
     underTest =
         new SonarConnector(new LogFacade(log), new URL("http://localhost:" + wireMockRule.port()),
-            null, null, "io.github.r0bb3n:sonar-quality-gate-maven-plugin");
+            "io.github.r0bb3n:sonar-quality-gate-maven-plugin", null, null);
   }
 
   /**
