@@ -78,7 +78,13 @@ public class SonarQualityGateMojo extends AbstractMojo {
    * <a href="https://docs.sonarqube.org/latest/extend/web-api/">SonarQube
    * - Web API Authentication</a> <br/> (aligned to sonar-maven-plugin analysis parameters, see also
    * <a href="https://docs.sonarqube.org/latest/analysis/analysis-parameters/">SonarQube - Analysis
-   * Parameters</a>)
+   * Parameters</a>)<br/>
+   * Since version <b>1.3.0</b> instead the environment variable {@code SONAR_TOKEN} can be used to
+   * provide a token (see these docs of
+   * <a href="https://docs.sonarcloud.io/advanced-setup/ci-based-analysis/sonarscanner-for-maven/#configuration">SonarCloud</a>
+   * and
+   * <a href="https://docs.sonarqube.org/latest/analysis/github-integration/#header-3">SonarQube</a>
+   * ).
    *
    * @since 1.0.0
    */
