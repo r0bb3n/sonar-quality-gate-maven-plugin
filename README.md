@@ -33,7 +33,7 @@ Include the plugin declaration in your `pom.xml`
 <plugin>
   <groupId>io.github.r0bb3n</groupId>
   <artifactId>sonar-quality-gate-maven-plugin</artifactId>
-  <version>1.2.1</version>
+  <version>1.3.0</version>
 </plugin>
 ```
 
@@ -136,14 +136,14 @@ mvn -B release:clean
 3. Persist:
    `git add CHANGELOG.md README.md && git commit -m "prepare for release: update CHANGELOG.md/README.md" && git push`
 4. Create release in git repo:
-   `mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.2.1 -Dtag=v1.2.1`
+   `mvn -B release:prepare -DdevelopmentVersion=1-SNAPSHOT -DreleaseVersion=1.3.0 -Dtag=v1.3.0`
 5. Create and publish binaries and documentation:
    `mvn -B release:perform -DreleaseProfiles=build-for-release`
 6. Create and push a tag for the site branch. Change into directory `./target/checkout/target/scmpublish-checkout` and
-   fire the according commands: `git tag v1.2.1-site && git push origin v1.2.1-site`
+   fire the according commands: `git tag v1.3.0-site && git push origin v1.3.0-site`
 7. Create new release on GitHub ([here](https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/releases/new))
-   - choose tag: v1.2.1
-   - set title: 1.2.1
+   - choose tag: v1.3.0
+   - set title: 1.3.0
    - copy the `CHANGELOG.md` content of the released version
    - upload the files `./target/checkout/target/*.(pom|jar|asc)`
 8. publish [staging repository of oss nexus repository](https://oss.sonatype.org/#stagingRepositories)

@@ -7,6 +7,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+--
+
+[unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.3.0...HEAD
+
+## [1.3.0]
+
 ### Added
 
 - support environment variable `SONAR_TOKEN` as alternative to the property `sonar.login` ([#243])
@@ -15,7 +21,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - update jackson-databind to fix [CVE-2022-42003] and [CVE-2022-42004] even if they are not exploitable in here
 
-[unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.2.1...HEAD
+[1.3.0]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.2.1...v1.3.0
 [#243]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/243
 [CVE-2022-42003]: https://nvd.nist.gov/vuln/detail/CVE-2022-42003
 [CVE-2022-42004]: https://nvd.nist.gov/vuln/detail/CVE-2022-42004
