@@ -23,9 +23,9 @@ jobs:
       - name: Get Now
         id: get-now
         run: |
-          echo "::set-output name=year::$(/bin/date -u "+%Y")"
-          echo "::set-output name=month::$(/bin/date -u "+%m")"
-          echo "::set-output name=day::$(/bin/date -u "+%d")"
+          echo "year=$(/bin/date -u "+%Y")" >> $GITHUB_OUTPUT
+          echo "month=$(/bin/date -u "+%m")" >> $GITHUB_OUTPUT
+          echo "day=$(/bin/date -u "+%d")" >> $GITHUB_OUTPUT
         shell: bash
       - name: Cache local Maven repository
         uses: actions/cache@v3
@@ -61,9 +61,9 @@ jobs:
       - name: Get Now
         id: get-now
         run: |
-          echo "::set-output name=year::$(/bin/date -u "+%Y")"
-          echo "::set-output name=month::$(/bin/date -u "+%m")"
-          echo "::set-output name=day::$(/bin/date -u "+%d")"
+          echo "year=$(/bin/date -u "+%Y")" >> $GITHUB_OUTPUT
+          echo "month=$(/bin/date -u "+%m")" >> $GITHUB_OUTPUT
+          echo "day=$(/bin/date -u "+%d")" >> $GITHUB_OUTPUT
       - name: Cache local Maven repository
         uses: actions/cache@v3
         with:
