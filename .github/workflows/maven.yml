@@ -132,7 +132,7 @@ jobs:
           mvn --file pom.xml --batch-mode \
             site
       - name: store site as job artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: site
           path: target/site/
