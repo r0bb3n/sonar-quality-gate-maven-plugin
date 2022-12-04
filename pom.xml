@@ -84,7 +84,6 @@
     <sonar.exclusions>.idea/**</sonar.exclusions>
 
     <version.jackson>2.14.1</version.jackson>
-    <version.jackson-databind>${version.jackson}</version.jackson-databind>
     <version.log4j>2.19.0</version.log4j>
     <version.hamcrest>2.2</version.hamcrest>
     <version.maven-plugin-tools>3.7.0</version.maven-plugin-tools>
@@ -498,7 +497,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${version.jackson-databind}</version>
+      <version>${version.jackson}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
