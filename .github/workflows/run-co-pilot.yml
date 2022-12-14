@@ -28,6 +28,6 @@ jobs:
           distribution: temurin
           java-version: 11
       - name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v3.2.0
       - name: Upload to CoPilot
         run: bash <(curl -s https://copilot.blackducksoftware.com/ci/githubactions/scripts/upload)
