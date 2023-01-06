@@ -41,7 +41,7 @@ jobs:
             dependency-check:check -P vuln-check
       - name: Upload dependency report for master branch
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: dep-report-master
           path: target/dependency-check-report.html
@@ -90,7 +90,7 @@ jobs:
             dependency-check:check -P vuln-check
       - name: Upload dependency report for latest tag
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: dep-report-latest
           path: target/dependency-check-report.html
