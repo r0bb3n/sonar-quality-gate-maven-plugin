@@ -11,4 +11,12 @@
     <packageUrl regex="true">^pkg:maven/org\.apache\.maven/maven\-model@.*$</packageUrl>
     <cve>CVE-2020-36460</cve>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+      file name: plexus-utils-3.3.1.jar
+      description: CVE is referencing a non-JAVA binary util collection
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.codehaus\.plexus/plexus\-utils@.*$</packageUrl>
+    <cve>CVE-2021-4277</cve>
+  </suppress>
 </suppressions>
