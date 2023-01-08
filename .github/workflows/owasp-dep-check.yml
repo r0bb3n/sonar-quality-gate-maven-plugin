@@ -28,7 +28,7 @@ jobs:
           echo "day=$(/bin/date -u "+%d")" >> $GITHUB_OUTPUT
         shell: bash
       - name: Cache local Maven repository
-        uses: actions/cache@v3.2.1
+        uses: actions/cache@v3.2.2
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-owasp-master-${{ steps.get-now.outputs.year }}-${{ steps.get-now.outputs.month }}-${{ steps.get-now.outputs.day }}
@@ -65,7 +65,7 @@ jobs:
           echo "month=$(/bin/date -u "+%m")" >> $GITHUB_OUTPUT
           echo "day=$(/bin/date -u "+%d")" >> $GITHUB_OUTPUT
       - name: Cache local Maven repository
-        uses: actions/cache@v3.2.1
+        uses: actions/cache@v3.2.2
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-owasp-latest-${{ steps.get-now.outputs.year }}-${{ steps.get-now.outputs.month }}-${{ steps.get-now.outputs.day }}
