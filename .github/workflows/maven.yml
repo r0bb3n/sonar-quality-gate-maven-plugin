@@ -33,7 +33,7 @@ jobs:
       - name: Read Git Coordinates - Branch
         id: push-branch-name
         if: github.event_name == 'push'
-        uses: actions/github-script@v6.3.3
+        uses: actions/github-script@v6.4.0
         with:
           # payload schema: https://developer.github.com/v3/activity/events/types/#pushevent
           script: |
@@ -43,7 +43,7 @@ jobs:
       - name: Read Git Coordinates - Pull Request
         id: pull-request-name
         if: github.event_name == 'pull_request'
-        uses: actions/github-script@v6.3.3
+        uses: actions/github-script@v6.4.0
         with:
           # payload schema: https://developer.github.com/v3/activity/events/types/#pullrequestevent
           script: |
