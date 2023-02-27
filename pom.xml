@@ -84,7 +84,7 @@
     <sonar.exclusions>.idea/**</sonar.exclusions>
 
     <version.jackson>2.14.2</version.jackson>
-    <version.log4j>2.19.0</version.log4j>
+    <version.log4j>2.20.0</version.log4j>
     <version.hamcrest>2.2</version.hamcrest>
     <version.maven-plugin-tools>3.7.1</version.maven-plugin-tools>
   </properties>
