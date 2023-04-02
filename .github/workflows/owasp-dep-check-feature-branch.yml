@@ -19,7 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3.3.0
       - name: Cache local Maven repository
-        uses: actions/cache@v3.2.6
+        uses: actions/cache@v3.3.1
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-owasp-${{ github.ref_name }}
