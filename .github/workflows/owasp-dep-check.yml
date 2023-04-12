@@ -16,7 +16,7 @@ jobs:
           distribution: temurin
           java-version: 11
       - name: Checkout `master` branch
-        uses: actions/checkout@v3.5.0
+        uses: actions/checkout@v3.5.1
         with:
           ref: master
       # http://man7.org/linux/man-pages/man1/date.1.html
@@ -54,7 +54,7 @@ jobs:
           distribution: temurin
           java-version: 11
       - name: Checkout `latest` tag
-        uses: actions/checkout@v3.5.0
+        uses: actions/checkout@v3.5.1
         with:
           ref: latest
       # http://man7.org/linux/man-pages/man1/date.1.html
