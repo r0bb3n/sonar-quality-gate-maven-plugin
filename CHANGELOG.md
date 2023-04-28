@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- migrate to maven-plugin-report-plugin for site creation ([#379])
+
 ### Fixed
 
 - fix broken "Fork me on GitHub" ribbon on plugin site ([#378])
@@ -14,6 +18,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 [unreleased]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/compare/v1.3.0...HEAD
 
 [#378]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/378
+
+[#379]: https://github.com/r0bb3n/sonar-quality-gate-maven-plugin/issues/379
 
 ## [1.3.0]
 

@@ -39,6 +39,13 @@ import org.r0bb3n.maven.model.Task;
 
 /**
  * Check project status in SonarQube and fail build, if quality gate is not passed
+ * <br/>
+ * <b>REQUIRED SonarQube version</b> (by mode):
+ * <ul>
+ *   <li>5.3+ (integrated)</li>
+ *   <li>5.4+ (simple)</li>
+ *   <li>7.7+ (advanced)</li>
+ * </ul>
  */
 @Mojo(name = "check", aggregator = true)
 public class SonarQualityGateMojo extends AbstractMojo {
